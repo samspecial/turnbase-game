@@ -25,6 +25,7 @@
     width: 60px;
     height: 60px;
     outline: 1px solid #3a3939ad;
+    position:relative;
 }
 
 .figure {
@@ -66,4 +67,7 @@
 }
 .weapon3{
     background:yellow;
+}
+.empty{
+    background:white;
 }
