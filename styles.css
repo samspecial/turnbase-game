@@ -25,12 +25,13 @@
     width: 60px;
     height: 60px;
     outline: 1px solid #3a3939ad;
+    position:relative;
 }
 
 .figure {
     width: 60px;
     height: 60px;
-    background: radial-gradient(circle, red 10%, black 90%);
+    background: radial-gradient(circle, rgb(142, 170, 194) 10%, rgb(136, 136, 136) 90%);
     padding: 10px;
     clip-path: polygon(0% 5px, 5px 0%, calc(100% - 5px) 0%, 100% 5px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 5px 100%, 0% calc(100% - 5px));
 }
@@ -46,11 +47,27 @@
 
 .player {
     /* width: 90%; */
-    background: yellow;
+    background: Black;
+}
+.player1 {
+    /* width: 90%; */
+    background:purple;
 }
 .weapon {
     /* width: 90%; */
     /* height: 45%;
     padding: 10px; */
     background: green;
+}
+.weapon1{
+    background: red;
+}
+.weapon2{
+    background:blue;
+}
+.weapon3{
+    background:yellow;
+}
+.empty{
+    background:white;
 }
