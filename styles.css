@@ -45,29 +45,26 @@
 
 }
 
-.player {
-    /* width: 90%; */
-    background: Black;
-}
 .player1 {
+    /* width: 90%; */
+    background: black;
+}
+.player2 {
     /* width: 90%; */
     background:purple;
 }
-.weapon {
+.weapon1 {
     /* width: 90%; */
     /* height: 45%;
     padding: 10px; */
     background: green;
 }
-.weapon1{
+.weapon2{
     background: red;
 }
-.weapon2{
+.weapon3{
     background:blue;
 }
-.weapon3{
+.weapon4{
     background:yellow;
-}
-.empty{
-    background:white;
 }
