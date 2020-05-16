@@ -2,7 +2,7 @@
 function createGameBoard() {
     for (let i = 1; i < 10; i++) {
         for (let j = 1; j < 10; j++) {
-            $('#gameBoard').append(`<div class="square" data-rows=${i} data-columns=${j}></div>`)
+            $('#gameBoard').append(`<div class="square" data-rows=${i} data-columns=${j}>${i},${j}</div>`)
         }
     }
 }
@@ -57,8 +57,7 @@ function placeItem(item) {
     let row = randomNumber(1, 9);
     let column = randomNumber(1, 9);
     let selectedSquare = $(`[data-rows=${row}][data-columns=${column}]`);
-    isOccupied = selectedSquare.hasClass('occupied') //return true or false
-
+    isOccupied = selectedSquare.hasClass('occupied')
     if (isOccupied) {
         return placeItem(item);
     } else {
@@ -66,19 +65,7 @@ function placeItem(item) {
         selectedSquare.addClass(item['name']).addClass('occupied');
     }
 }
-// function placeBarrier(item) {
-//     let isOccupied = ""
-//     let row = randomNumber(1, 9);
-//     let col = randomNumber(1, 9);
-//     let selectedSquare = $(`[data-rows=${row}][data-columns=${col}]`);
-//     isOccupied = selectedSquare.hasClass('occupied') //return true or false
 
-//     if (isOccupied) {
-//         return placeBarrier(item);
-//     } else {
-//         selectedSquare.addClass(item['name']).addClass('occupied');
-//     }
-// }
 function renderBarriers() {
     for (var i = 0; i < 12; i++) {
         placeItem(barrier);
@@ -108,16 +95,68 @@ function switchPlayer() {
 }
 
 function movePlayer(newRow, newColumn) {
-    let playerRow = newRow;
-    let playerColumn = newColumn;
     let currentPlayerRow = currentPlayer['location']['row']
     let currentPlayerColumn = currentPlayer['location']['column']
-    $(`[data-rows=${currentPlayerRow}][data-columns=${currentPlayerColumn}]`).removeClass(currentPlayer['name']);
-    $(`[data-rows=${playerRow}][data-columns=${playerColumn}]`).addClass(currentPlayer['name']);
-    currentPlayer['location']['row'] = playerRow;
-    currentPlayer['location']['column'] = playerColumn;
-    switchPlayer();
+    let playRow = newRow;
+    let playerColumn = newColumn
+    let moveNow = validMove(playRow, playerColumn)
+    if (moveNow) {
+        $(`[data-rows=${currentPlayerRow}][data-columns=${currentPlayerColumn}]`).removeClass(currentPlayer['name']);
+        $(`[data-rows=${newRow}][data-columns=${newColumn}]`).addClass(currentPlayer['name']);
+        currentPlayer['location']['row'] = playRow;
+        currentPlayer['location']['column'] = playerColumn;
+        switchPlayer();
+    } else {
+        alert("Wrong Move")
+    }
+
 }
+
+function validMove(a, b) {
+    const direct = currentPlayer['location']['column']
+    const directRow = currentPlayer['location']['row']
+    const direction = b === direct ? 'column' : 'row';
+    const columnChange = Math.abs(direct - b);
+    const rowChange = Math.abs(directRow - a);
+    const validColumnChange = direction === 'column' && columnChange === 0 && rowChange <= 3;
+    const validRowChange = direction === 'row' && columnChange <= 3 && rowChange === 0;
+    let canMove = (validColumnChange || validRowChange);
+    return canMove
+}
+// function limitQuare(newRow, newCol, rowDiff, colDiff) {
+//     let isOccupied = "";
+//     let selSquare = $('square')
+//     console.log(selSquare)
+//     let selectedSquare = $(`[data-rows=${newRow}][data-columns=${newCol}]`);
+//     console.log(colDiff)
+//     console.log(selectedSquare)
+//     isOccupied = selectedSquare.hasClass('figure')
+//     for (let i = 0; i < colDiff; i++) {
+//         if (isOccupied) {
+//             alert('Invalid')
+//         } else {
+
+//             console.log('great')
+//         }
+//     }
+    // return limitQuare(newRow, newCol, rowDiff, colDiff)
+
+    // if (isOccupied) {
+    //     return placeItem(item);
+    // } else {
+    //     item['location'] = { row: row, column: column }
+    //     selectedSquare.addClass(item['name']).addClass('occupied');
+    // }
+}
+
+// Select a new square
+// Determine the number of squares the player will move through to get to the square
+// Look at each square to see if it contains a barrier class
+//     If a barrier class is found
+//     alert the user of a wrong move
+//   End
+//     Else Move to the next square
+// Repeat step 3
 
 $('#gameBoard').on('click', function () {
     movePlayer(event.target.dataset.rows, event.target.dataset.columns)
