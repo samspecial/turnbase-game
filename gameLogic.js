@@ -16,15 +16,15 @@ const weapons = [{
     power: 10,
     img: ''
 }, {
-    name: 'weapon2',
+    name: 'weapon1',
     power: 10,
     img: ''
 }, {
-    name: 'weapon3',
+    name: 'weapon1',
     power: 10,
     img: ''
 }, {
-    name: 'weapon4',
+    name: 'weapon1',
     power: 10,
     img: ''
 }]
@@ -86,77 +86,143 @@ renderPlayers();
 renderWeapons();
 
 let currentPlayer = player[0]
-function switchPlayer() {
-    if (currentPlayer === player[0]) {
-        currentPlayer = player[1];
-    } else {
-        currentPlayer = player[0];
-    }
-}
+// function switchPlayer() {
+//     if (currentPlayer === player[0]) {
+//         currentPlayer = player[1];
+//     } else {
+//         currentPlayer = player[0];
+//     }
+// }
 
 function movePlayer(newRow, newColumn) {
     let currentPlayerRow = currentPlayer['location']['row']
     let currentPlayerColumn = currentPlayer['location']['column']
-    let playRow = newRow;
+    let playerRow = newRow;
     let playerColumn = newColumn
-    let moveNow = validMove(playRow, playerColumn)
-    if (moveNow) {
+    let barrierCheck = checkBarriers(newRow, newColumn)
+    let weaponCheck = checkWeapons(newRow, newColumn, weapons)
+    let moveNow = validMove(playerRow, playerColumn)
+    if (!barrierCheck && moveNow && !weaponCheck) {
         $(`[data-rows=${currentPlayerRow}][data-columns=${currentPlayerColumn}]`).removeClass(currentPlayer['name']);
         $(`[data-rows=${newRow}][data-columns=${newColumn}]`).addClass(currentPlayer['name']);
-        currentPlayer['location']['row'] = playRow;
+        currentPlayer['location']['row'] = playerRow;
         currentPlayer['location']['column'] = playerColumn;
-        switchPlayer();
+        // switchPlayer();
     } else {
         alert("Wrong Move")
     }
 
 }
 
-function validMove(a, b) {
-    const direct = currentPlayer['location']['column']
-    const directRow = currentPlayer['location']['row']
-    const direction = b === direct ? 'column' : 'row';
-    const columnChange = Math.abs(direct - b);
-    const rowChange = Math.abs(directRow - a);
-    const validColumnChange = direction === 'column' && columnChange === 0 && rowChange <= 3;
-    const validRowChange = direction === 'row' && columnChange <= 3 && rowChange === 0;
+function validMove(squareRow, squareCol) {
+    const playerCol = currentPlayer['location']['column']
+    const playerRow = currentPlayer['location']['row']
+    const direction = (squareRow === playerRow) ? 'column' : 'row';
+    const columnChange = Math.abs(playerCol - squareCol);
+    const rowChange = Math.abs(playerRow - squareRow);
+    const validColumnChange = (direction === 'column') && (columnChange <= 3) && (rowChange === 0);
+    const validRowChange = (direction === 'row') && (rowChange <= 3) && (columnChange === 0);
     let canMove = (validColumnChange || validRowChange);
     return canMove
-}
-// function limitQuare(newRow, newCol, rowDiff, colDiff) {
-//     let isOccupied = "";
-//     let selSquare = $('square')
-//     console.log(selSquare)
-//     let selectedSquare = $(`[data-rows=${newRow}][data-columns=${newCol}]`);
-//     console.log(colDiff)
-//     console.log(selectedSquare)
-//     isOccupied = selectedSquare.hasClass('figure')
-//     for (let i = 0; i < colDiff; i++) {
-//         if (isOccupied) {
-//             alert('Invalid')
-//         } else {
-
-//             console.log('great')
-//         }
-//     }
-    // return limitQuare(newRow, newCol, rowDiff, colDiff)
-
-    // if (isOccupied) {
-    //     return placeItem(item);
-    // } else {
-    //     item['location'] = { row: row, column: column }
-    //     selectedSquare.addClass(item['name']).addClass('occupied');
-    // }
 }
 
 // Select a new square
 // Determine the number of squares the player will move through to get to the square
 // Look at each square to see if it contains a barrier class
-//     If a barrier class is found
+// If a barrier class is found
 //     alert the user of a wrong move
 //   End
 //     Else Move to the next square
 // Repeat step 3
+function checkBarriers(squareRow, squareCol) {
+    const playerCol = currentPlayer['location']['column'];
+    const playerRow = currentPlayer['location']['row'];
+    const direction = (squareRow === playerRow) ? 'column' : 'row';
+    const columnChange = playerCol - squareCol;
+    const rowChange = playerRow - squareRow;
+    let thisSquare = ''
+    if (direction === 'column') {
+        if (columnChange <= 0) {
+            for (let i = parseInt(playerCol, 10) + 1; i <= squareCol; ++i) {
+                thisSquare = $(`[data-rows=${playerRow}][data-columns=${i}]`).hasClass('figure')
+                if (thisSquare) {
+                    return true
+                }
+            }
+        } else {
+            for (let i = parseInt(playerCol, 10) - 1; i >= squareCol; --i) {
+                thisSquare = $(`[data-rows=${playerRow}][data-columns=${i}]`).hasClass('figure')
+                if (thisSquare) {
+                    return true
+                }
+            }
+        }
+    } else {
+        if (rowChange <= 0) {
+            for (let i = parseInt(playerRow, 10) + 1; i <= squareRow; ++i) {
+                thisSquare = $(`[data-rows=${i}][data-columns=${playerCol}]`).hasClass('figure')
+                if (thisSquare) {
+                    return true
+                }
+            }
+        } else {
+            for (let i = parseInt(playerRow, 10) - 1; i >= squareRow; --i) {
+                thisSquare = $(`[data-rows=${i}][data-columns=${playerCol}]`).hasClass('figure')
+                if (thisSquare) {
+                    return true
+                }
+            }
+        }
+    }
+}
+function checkWeapons(squareRow, squareCol, item) {
+    const playerCol = currentPlayer['location']['column'];
+    const playerRow = currentPlayer['location']['row'];
+    const direction = (squareRow === playerRow) ? 'column' : 'row';
+    const columnChange = playerCol - squareCol;
+    const rowChange = playerRow - squareRow;
+    let currentPlayerWeapon = currentPlayer['weapon']['name'];
+    let isWeapon = ''
+    if (direction === 'column') {
+        if (columnChange <= 0) {
+            for (let i = parseInt(playerCol, 10) + 1; i <= squareCol; ++i) {
+                isWeapon = $(`[data-rows=${playerRow}][data-columns=${i}]`).hasClass('weapon1')
+                console.log(currentPlayer['weapon']['name'])
+                if (isWeapon) {
+                    currentPlayerWeapon = item['img']
+                    console.log(currentPlayerWeapon)
+                }
+            }
+        } else {
+            for (let i = parseInt(playerCol, 10) - 1; i >= squareCol; --i) {
+                isWeapon = $(`[data-rows=${playerRow}][data-columns=${i}]`).hasClass('weapon1')
+                if (isWeapon) {
+                    currentPlayerWeapon = item['img']
+                    console.log(currentPlayerWeapon)
+                }
+            }
+        }
+    } else {
+        if (rowChange <= 0) {
+            for (let i = parseInt(playerRow, 10) + 1; i <= squareRow; ++i) {
+                isWeapon = $(`[data-rows=${i}][data-columns=${playerCol}]`).hasClass('weapon1')
+                if (isWeapon) {
+                    currentPlayerWeapon = item['img']
+                    console.log(currentPlayerWeapon)
+                }
+            }
+        } else {
+            for (let i = parseInt(playerRow, 10) - 1; i >= squareRow; --i) {
+                isWeapon = $(`[data-rows=${i}][data-columns=${playerCol}]`).hasClass('weapon1')
+                if (isWeapon) {
+                    currentPlayerWeapon = item['img']
+                    console.log(currentPlayerWeapon)
+                }
+            }
+        }
+    }
+}
+
 
 $('#gameBoard').on('click', function () {
     movePlayer(event.target.dataset.rows, event.target.dataset.columns)
