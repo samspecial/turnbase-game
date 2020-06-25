@@ -93,7 +93,8 @@ let currentPlayer = player[0]
 //         currentPlayer = player[0];
 //     }
 // }
-
+let currentPlayerRow = currentPlayer['location']['row']
+let currentPlayerColumn = currentPlayer['location']['column']
 function movePlayer(newRow, newColumn) {
     let currentPlayerRow = currentPlayer['location']['row']
     let currentPlayerColumn = currentPlayer['location']['column']
@@ -226,4 +227,70 @@ function checkWeapons(squareRow, squareCol, item) {
 
 $('#gameBoard').on('click', function () {
     movePlayer(event.target.dataset.rows, event.target.dataset.columns)
+})
+
+// it's job is to traverse all 4 directions uptill 3 boxes away,
+// if there is an obstacle, stop, if not, highlight the box, and if player found adjacent, start battle
+
+// Function traverseSquare
+
+// Function traverseSquare
+
+
+
+function traverseDirections(i, j) {
+    let highlight = '';
+    for (let x = i; x <= i + 2; x++) {
+
+        if (!$('.figure')) {
+            console.log('.figure')
+            continue; // Check what to do
+        }
+        if ($('.player')) {
+            // startBattle()
+        }
+        console.log('Movement down the row')
+        console.log(x, i, j)
+        highlight = $(`[data-rows=${x}][data-columns=${i}]`).addClass('blue')
+    }
+
+    for (let x = i; x <= i - 2; i--) {
+        if (!$('.figure')) {
+            console.log('.figure')
+            continue;  // Check what to do
+        }
+        if ($('.player')) {
+            // startBattle()
+        }
+        console.log('Moving Up the Row')
+        highlight = $(`[data-rows=${x}][data-columns=${i}]`).addClass('blue')
+    }
+
+    // for (let x = 0; x < j + 3; j++) {
+    //     if ($('.figure')) {
+    //         // continue;  // Check what to do
+    //     }
+    //     if ($('player')) {
+    //         // startBattle()
+    //         console.log('Now working Three')
+    //     }
+    //     $(`[data-rows=${j}]`).style.borderColor = 'red';
+    // }
+
+    // for (let x = 0; x < j - 3; j--) {
+    //     if ($('.figure')) {
+    //         // continue;  // Check what to do
+    //     }
+    //     if ($('player')) {
+    //         // startBattle()
+    //         console.log('Now working Four')
+    //     }
+    //     $(`[data-rows=${j}]`).style.borderColor = 'red';
+    // }
+}
+
+
+
+$(document).ready(function () {
+    traverseDirections(currentPlayerRow, currentPlayerColumn);
 })
