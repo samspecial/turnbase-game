@@ -107,13 +107,15 @@ function movePlayer(newRow, newColumn) {
     if (!barrierCheck && moveNow) {
 
         $(`[data-rows=${currentPlayerRow}][data-columns=${currentPlayerColumn}]`).removeClass(currentPlayer['name']);
-        clearHighlighedSquare();
         console.log(clearHighlighedSquare())
+        clearHighlighedSquare();
         $(`[data-rows=${newRow}][data-columns=${newColumn}]`).addClass(currentPlayer['name']);
+        console.log(newRow, newColumn)
         currentPlayer['location']['row'] = playerRow;
         currentPlayer['location']['column'] = playerColumn;
+        traverseDirections(newRow, newColumn)
         // switchPlayer();
-        traverseDirections(playerRow, playerColumn)
+        // 
     } else {
         alert("Wrong Move")
     }
@@ -197,57 +199,53 @@ function clearHighlighedSquare() {
     return $('.blue').removeClass('blue')
 }
 function traverseDirections(i, j) {
-    let highlight;
+    let highlight = ''
     const figure = $('.square').hasClass('figure')
-    for (let x = i; x <= i + 2; x++) {
+    let down = i + 3; up = i - 3; right = j - 3; left = j + 3;
+    for (let x = i; x <= down; x++) {
+        console.log(typeof (down))
+        console.log(down)
+        console.log(x, j)
+        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
+        console.log(highlight)
+        // if (!figure) {
+        //     continue; // Check what to do
+        // }
+        // if ($('.player')) {
+        //     // startBattle()
+        // }
+    }
+    for (let x = i; x >= up; x--) {
 
         if (!figure) {
-            console.log('Not working')
             continue; // Check what to do
         }
         if ($('.player')) {
             // startBattle()
         }
-        console.log('Movement down the row')
-        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
-
-    }
-    for (let x = i; x >= i - 2; x--) {
-
-        if (!figure) {
-            console.log('Not working')
-            continue; // Check what to do
-        }
-        if ($('.player')) {
-            // startBattle()
-        }
-        console.log('Movement up the row')
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
     }
 
-    for (let x = j; x <= j + 2; x++) {
+    for (let x = j; x <= left; x++) {
         if (!figure) {
-            console.log('.figure')
             continue;  // Check what to do
         }
         if ($('.player')) {
             // startBattle()
         }
-        console.log('Moving Right the Column')
-        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
+        highlight = $(`[data-rows=${i}][data-columns=${x}]`)
+        console.log(highlight)
     }
-    for (let x = j; x >= j - 2; x--) {
+    for (let x = j; x >= right; x--) {
         if (!figure) {
-            console.log('.figure')
             continue;  // Check what to do
         }
         if ($('.player')) {
             // startBattle()
         }
-        console.log('Moving Left the Column')
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
     }
-    return highlight
+
 }
 
 $(document).ready(function () {
