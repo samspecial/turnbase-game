@@ -13,19 +13,19 @@ function randomNumber(min, max) {
 
 const weapons = [{
     name: 'weapon1',
-    power: 10,
+    power: 60,
     img: ''
 }, {
-    name: 'weapon1',
-    power: 10,
+    name: 'weapon2',
+    power: 50,
     img: ''
 }, {
-    name: 'weapon1',
-    power: 10,
+    name: 'weapon3',
+    power: 40,
     img: ''
 }, {
-    name: 'weapon1',
-    power: 10,
+    name: 'weapon4',
+    power: 30,
     img: ''
 }]
 const player = [{
@@ -35,7 +35,8 @@ const player = [{
         name: 'weapon',
         power: 10,
         img: ''
-    }, location: {
+    },
+    location: {
         row: 0,
         column: 0
     }
@@ -46,7 +47,8 @@ const player = [{
         name: 'weapon',
         power: 10,
         img: ''
-    }, location: {
+    },
+    location: {
         row: 0,
         column: 0
     }
@@ -86,13 +88,13 @@ renderPlayers();
 renderWeapons();
 
 let currentPlayer = player[0]
-// function switchPlayer() {
-//     if (currentPlayer === player[0]) {
-//         currentPlayer = player[1];
-//     } else {
-//         currentPlayer = player[0];
-//     }
-// }
+function switchPlayer() {
+    if (currentPlayer === player[0]) {
+        currentPlayer = player[1];
+    } else {
+        currentPlayer = player[0];
+    }
+}
 let currentPlayerRow = currentPlayer['location']['row']
 let currentPlayerColumn = currentPlayer['location']['column']
 function movePlayer(newRow, newColumn) {
@@ -105,16 +107,16 @@ function movePlayer(newRow, newColumn) {
     let barrierCheck = checkBarriers(newRow, newColumn)
     let moveNow = validMove(playerRow, playerColumn)
     if (!barrierCheck && moveNow) {
-
+        pickWeapon(newRow, newColumn, weapons)
         $(`[data-rows=${currentPlayerRow}][data-columns=${currentPlayerColumn}]`).removeClass(currentPlayer['name']);
-        console.log(clearHighlighedSquare())
-        clearHighlighedSquare();
+
         $(`[data-rows=${newRow}][data-columns=${newColumn}]`).addClass(currentPlayer['name']);
-        console.log(newRow, newColumn)
         currentPlayer['location']['row'] = playerRow;
         currentPlayer['location']['column'] = playerColumn;
-        traverseDirections(newRow, newColumn)
-        // switchPlayer();
+        clearHighlighedSquare();
+
+        switchPlayer();
+        traverseDirections(parseInt(currentPlayer['location']['row'], 10), parseInt(currentPlayer['location']['column'], 10))
         // 
     } else {
         alert("Wrong Move")
@@ -183,42 +185,53 @@ function checkBarriers(squareRow, squareCol) {
         }
     }
 }
+// Select a square by passing the value of i and j
+// Check for a class of weapon on the square
+// If present, remove the weapon on the player
+// Add the weapon in the square to the player
 
+const pickWeapon = (i, j, weapons, weapon) => {
+    for (x = 0; x < weapons.length; x++) {
+        let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
+        let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
+        if (weaponPosition) {
+            currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] }
+            selectWeaponSquare.removeClass(weapons[x]['name'])
+            console.log(currentPlayer)
+        }
+    }
+}
 
 $('#gameBoard').on('click', function () {
     movePlayer(event.target.dataset.rows, event.target.dataset.columns)
 })
 
-// it's job is to traverse all 4 directions uptill 3 boxes away,
-// if there is an obstacle, stop, if not, highlight the box, and if player found adjacent, start battle
-
-// Function traverseSquare
-
-// Function traverseSquare
 function clearHighlighedSquare() {
     return $('.blue').removeClass('blue')
 }
+
+// Function traverseSquare
 function traverseDirections(i, j) {
     let highlight = ''
-    const figure = $('.square').hasClass('figure')
-    let down = i + 3; up = i - 3; right = j - 3; left = j + 3;
-    for (let x = i; x <= down; x++) {
-        console.log(typeof (down))
-        console.log(down)
-        console.log(x, j)
-        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
-        console.log(highlight)
-        // if (!figure) {
-        //     continue; // Check what to do
-        // }
-        // if ($('.player')) {
-        //     // startBattle()
-        // }
-    }
-    for (let x = i; x >= up; x--) {
+    let figure;
+    // let columnMovement
+    // let rowMovement
+    for (let x = i; x <= i + 3; x++) {
 
-        if (!figure) {
-            continue; // Check what to do
+        figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
+
+        if (figure) {
+            break; // Check what to do
+        }
+        if ($('.player')) {
+            // startBattle()
+        }
+        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
+    }
+    for (let x = i; x >= i - 3; x--) {
+        figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
+        if (figure) {
+            break;
         }
         if ($('.player')) {
             // startBattle()
@@ -226,19 +239,21 @@ function traverseDirections(i, j) {
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
     }
 
-    for (let x = j; x <= left; x++) {
-        if (!figure) {
-            continue;  // Check what to do
+    for (let x = j; x <= j + 3; x++) {
+
+        figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
+        if (figure) {
+            break;
         }
         if ($('.player')) {
-            // startBattle()
+            // 
         }
-        highlight = $(`[data-rows=${i}][data-columns=${x}]`)
-        console.log(highlight)
+        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
     }
-    for (let x = j; x >= right; x--) {
-        if (!figure) {
-            continue;  // Check what to do
+    for (let x = j; x >= j - 3; x--) {
+        figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
+        if (figure) {
+            break;
         }
         if ($('.player')) {
             // startBattle()
@@ -251,3 +266,4 @@ function traverseDirections(i, j) {
 $(document).ready(function () {
     traverseDirections(currentPlayerRow, currentPlayerColumn);
 })
+
