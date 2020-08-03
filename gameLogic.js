@@ -11,6 +11,7 @@ function randomNumber(min, max) {
     return Math.floor(Math.random() * max) + min;
 }
 
+
 const weapons = [{
     name: 'weapon1',
     power: 60,
@@ -54,6 +55,7 @@ const player = [{
     }
 }]
 const barrier = { name: "figure" }
+
 function placeItem(item) {
     let isOccupied = ""
     let row = randomNumber(1, 9);
@@ -95,12 +97,41 @@ function switchPlayer() {
         currentPlayer = player[0];
     }
 }
+
+// DISPLAY PLAYERS INFO ON THE GAME BOARD
+// PLAYER ONE COLOUR = BLACK
+// PLAYER TWO COLOR = PINK
+
+function playerInfo(type) {
+    let playerName;
+    let playerPoint;
+    let playerWeapon;
+    function selectElement(selectorAll) {
+        let selectElement = document.getElementsByClassName(selectorAll)
+
+        if (selectElement.length > 0) {
+            for (let i = 0; i < selectElement.length; i++) {
+                console.log(selectElement[i])
+                return selectElement[i]
+            }
+        }
+    }
+    // selectElement()
+    let name = selectElement('name'), life = selectElement('lifePoint'), weapon = selectElement('weapon')
+    console.log(name)
+    for (x = 0; x < type.length; x++) {
+        playerName += type[x]['name']
+    }
+    return playerName;
+    name.textContent = playerName
+}
+
 let currentPlayerRow = currentPlayer['location']['row']
 let currentPlayerColumn = currentPlayer['location']['column']
 function movePlayer(newRow, newColumn) {
     let currentPlayerRow = currentPlayer['location']['row']
     let currentPlayerColumn = currentPlayer['location']['column']
-
+    console.log(currentPlayer)
     let playerRow = newRow;
     let playerColumn = newColumn;
 
@@ -195,12 +226,29 @@ const pickWeapon = (i, j, weapons, weapon) => {
         let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
         let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
         if (weaponPosition) {
+            oldWeapon = currentPlayer['weapon']
+            console.log(oldWeapon)
             currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] }
             selectWeaponSquare.removeClass(weapons[x]['name'])
+            selectWeaponSquare.addClass(oldWeapon['name'])
             console.log(currentPlayer)
         }
     }
 }
+
+// const pickWeapon = (i, j, weapons, weapon) => {
+//     for (x = 0; x < weapons.length; x++) {
+//         let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
+//         let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
+//         if (weaponPosition) {
+//             oldWeapon = currentPlayer['weapon'];
+//             currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] }
+//             selectWeaponSquare.removeClass(weapons[x]['name'])
+//             selectWeaponSquare.addClass(oldWeapon['name'])
+//             console.log('player, weapon', currentPlayer, oldWeapon)
+//         }
+//     }
+// }
 
 $('#gameBoard').on('click', function () {
     movePlayer(event.target.dataset.rows, event.target.dataset.columns)
@@ -212,51 +260,58 @@ function clearHighlighedSquare() {
 
 // Function traverseSquare
 function traverseDirections(i, j) {
+    playerInfo(player)
     let highlight = ''
     let figure;
-    // let columnMovement
-    // let rowMovement
-    for (let x = i; x <= i + 3; x++) {
-
+    let selectPlayer;
+    function checkPlayer(a, b) {
+        for (y = 0; y < player.length; y++) {
+            playerCheckResult = $(`[data-rows=${a}][data-columns=${b}]`).hasClass(player[y]['name'])
+        }
+        return playerCheckResult
+    }
+    for (let x = i + 1; x <= i + 3; x++) {
+        selectPlayer = checkPlayer(x, j)
         figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
-
         if (figure) {
             break; // Check what to do
         }
-        if ($('.player')) {
-            // startBattle()
+        if (selectPlayer) {
+            console.log('I am Ready to Battle', selectPlayer)
         }
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
     }
-    for (let x = i; x >= i - 3; x--) {
+    for (let x = i - 1; x >= i - 3; x--) {
+        selectPlayer = checkPlayer(x, j)
         figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
         if (figure) {
             break;
         }
-        if ($('.player')) {
-            // startBattle()
+        if (selectPlayer) {
+            console.log('I am Ready to Battle', selectPlayer)
         }
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
     }
 
-    for (let x = j; x <= j + 3; x++) {
-
+    for (let x = j + 1; x <= j + 3; x++) {
+        selectPlayer = checkPlayer(i, x)
         figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
         if (figure) {
             break;
         }
-        if ($('.player')) {
-            // 
+        if (selectPlayer) {
+            console.log('I am Ready to Battle', selectPlayer)
         }
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
     }
-    for (let x = j; x >= j - 3; x--) {
+    for (let x = j - 1; x >= j - 3; x--) {
+        selectPlayer = checkPlayer(i, x)
         figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
         if (figure) {
             break;
         }
-        if ($('.player')) {
-            // startBattle()
+        if (selectPlayer) {
+            console.log('I am Ready to Battle', selectPlayer)
         }
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
     }

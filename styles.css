@@ -37,23 +37,25 @@
 }
 
 #playerInfo {
-    background: red;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
 
 }
+.player{
+    background:greenyellow;
+}
 .blue{
     background:blue;
 }
 .player1 {
     /* width: 90%; */
-    background: black;
+    background: black !important;
 }
 .player2 {
     /* width: 90%; */
-    background:purple;
+    background:purple !important;
 }
 .weapon1 {
     /* width: 90%; */
@@ -69,4 +71,24 @@
 }
 .weapon4{
     background:yellow;
+}
+
+
+
+CSS
+
+.player1 {
+    /* width: 90%; */
+    background: black !important;
+}
+.player2 {
+    /* width: 90%; */
+    background:purple !important;
+}
+
+.weapon {
+    /* width: 90%; */
+    /* height: 45%;
+    padding: 10px; */
+    /* background:pink; */
 }
