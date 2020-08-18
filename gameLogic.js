@@ -1,4 +1,4 @@
-
+// import { Player } from './player'
 // const me = new Player('bayo', { name: 'Sam', power: 20 }, { row: 0, column: 0 }, 100)
 // console.log(me)
 
@@ -140,8 +140,8 @@ function movePlayer(newRow, newColumn) {
     let currentPlayerRow = currentPlayer['location']['row']
     let currentPlayerColumn = currentPlayer['location']['column']
     console.log(currentPlayer)
-    let playerRow = newRow;
-    let playerColumn = newColumn;
+    let playerRow = parseInt(newRow, 10);
+    let playerColumn = parseInt(newColumn, 10);
 
     let barrierCheck = checkBarriers(parseInt(newRow, 10), parseInt(newColumn, 10))
     let moveNow = validMove(playerRow, playerColumn)

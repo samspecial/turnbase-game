@@ -6,3 +6,4 @@ class Player {
     this.health = health;
   }
 }
+// export { Player };
