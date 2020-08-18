@@ -17,36 +17,35 @@
         <div id="playerInfo">
             <div id="first" class="player">
                 <h1>Name:
-                    <span class="name"></span>
+                    <span id="player-one-name"></span>
                 </h1>
                 <p>Lifepoint:
-                    <span class="lifePoint"></span>
+                    <span id="player-one-lifepoint"></span>
                 </p>
                 <p>Weapon:
-                    <span class="weapon"></span>
+                    <span id="player-one-weapon"></span>
                 </p>
-                <p>Status:
-                    <span class="status">Now playing</span>
-                </p>
+                <button disabled type="button" id="playerOneAttack">Attack</button>
+                <button disabled type="button" id="playerOneDefend">Defend</button>
             </div>
             <div id="second" class="player">
                 <h1>Name:
-                    <span class="name"></span>
+                    <span id="player-two-name"></span>
                 </h1>
                 <p>Lifepoint:
-                    <span class="lifePoint"></span>
+                    <span id="player-two-lifepoint"></span>
                 </p>
                 <p>Weapon:
-                    <span class="weapon"></span>
+                    <span id="player-two-weapon"></span>
                 </p>
-                <p>Status:
-                    <span class="status">Now playing</span>
-                </p>
+                <button disabled type="button" id="playerTwoAttack">Attack</button>
+                <button disabled type="button" id="playerTwoDefend">Defend</button>
             </div>
         </div>
     </div>
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="gameLogic.js"></script>
+    <script src="player.js"></script>
 </body>
 
 </html>

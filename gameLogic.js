@@ -1,4 +1,8 @@
 
+// const me = new Player('bayo', { name: 'Sam', power: 20 }, { row: 0, column: 0 }, 100)
+// console.log(me)
+
+// Function to Generate Game Board of 9 by 9
 function createGameBoard() {
     for (let i = 1; i < 10; i++) {
         for (let j = 1; j < 10; j++) {
@@ -106,24 +110,28 @@ function playerInfo(type) {
     let playerName;
     let playerPoint;
     let playerWeapon;
-    function selectElement(selectorAll) {
-        let selectElement = document.getElementsByClassName(selectorAll)
+    function selectElement(selectorName) {
+        return document.getElementById(selectorName)
+    }
 
-        if (selectElement.length > 0) {
-            for (let i = 0; i < selectElement.length; i++) {
-                console.log(selectElement[i])
-                return selectElement[i]
-            }
-        }
-    }
-    // selectElement()
-    let name = selectElement('name'), life = selectElement('lifePoint'), weapon = selectElement('weapon')
-    console.log(name)
-    for (x = 0; x < type.length; x++) {
-        playerName += type[x]['name']
-    }
-    return playerName;
-    name.textContent = playerName
+    let playerOneName = selectElement('player-one-name'), playerOneLifepoint = selectElement('player-one-lifepoint'), playerOneWeapon = selectElement('player-one-weapon')
+    let playerTwoName = selectElement('player-two-name'), playerTwoLifepoint = selectElement('player-two-lifepoint'), playerTwoWeapon = selectElement('player-two-weapon')
+    playerOneName.textContent = type[0]['name']
+    playerTwoName.textContent = type[1]['name']
+    playerOneLifepoint.textContent = type[0]['lifepoint']
+    playerTwoLifepoint.textContent = type[1]['lifepoint']
+    playerOneWeapon.textContent = type[0]['weapon']['name']
+    playerTwoWeapon.textContent = type[1]['weapon']['name']
+}
+
+function fight() {
+    //Set Player's Lifepoints
+    let playerOneLifepoint = 100;
+    let playerTwoLifepoint = 100;
+    //Set Player Action for either defend or attack
+    let playerOneAttack = false;
+    let playerTwoAttack = false;
+    console.log(currentPlayer)
 }
 
 let currentPlayerRow = currentPlayer['location']['row']
@@ -135,7 +143,7 @@ function movePlayer(newRow, newColumn) {
     let playerRow = newRow;
     let playerColumn = newColumn;
 
-    let barrierCheck = checkBarriers(newRow, newColumn)
+    let barrierCheck = checkBarriers(parseInt(newRow, 10), parseInt(newColumn, 10))
     let moveNow = validMove(playerRow, playerColumn)
     if (!barrierCheck && moveNow) {
         pickWeapon(newRow, newColumn, weapons)
@@ -154,7 +162,7 @@ function movePlayer(newRow, newColumn) {
     }
 
 }
-
+//Check player move if Valid
 function validMove(squareRow, squareCol) {
     const playerCol = currentPlayer['location']['column']
     const playerRow = currentPlayer['location']['row']
@@ -178,13 +186,19 @@ function validMove(squareRow, squareCol) {
 function checkBarriers(squareRow, squareCol) {
     const playerCol = currentPlayer['location']['column'];
     const playerRow = currentPlayer['location']['row'];
+
     const direction = (squareRow === playerRow) ? 'column' : 'row';
+    console.log(direction)
+    console.log(squareRow + squareCol)
     const columnChange = playerCol - squareCol;
+    console.log(columnChange)
     const rowChange = playerRow - squareRow;
     let thisSquare = ''
     if (direction === 'column') {
         if (columnChange <= 0) {
             for (let i = parseInt(playerCol, 10) + 1; i <= squareCol; i++) {
+                console.log(typeof (squareCol))
+                console.log(typeof (playerCol))
                 thisSquare = $(`[data-rows=${playerRow}][data-columns=${i}]`).hasClass('figure')
                 if (thisSquare) {
                     return true
@@ -222,11 +236,11 @@ function checkBarriers(squareRow, squareCol) {
 // Add the weapon in the square to the player
 
 const pickWeapon = (i, j, weapons, weapon) => {
-    for (x = 0; x < weapons.length; x++) {
+    for (let x = 0; x < weapons.length; x++) {
         let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
         let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
         if (weaponPosition) {
-            oldWeapon = currentPlayer['weapon']
+            let oldWeapon = currentPlayer['weapon']
             console.log(oldWeapon)
             currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] }
             selectWeaponSquare.removeClass(weapons[x]['name'])
@@ -235,20 +249,6 @@ const pickWeapon = (i, j, weapons, weapon) => {
         }
     }
 }
-
-// const pickWeapon = (i, j, weapons, weapon) => {
-//     for (x = 0; x < weapons.length; x++) {
-//         let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
-//         let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
-//         if (weaponPosition) {
-//             oldWeapon = currentPlayer['weapon'];
-//             currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] }
-//             selectWeaponSquare.removeClass(weapons[x]['name'])
-//             selectWeaponSquare.addClass(oldWeapon['name'])
-//             console.log('player, weapon', currentPlayer, oldWeapon)
-//         }
-//     }
-// }
 
 $('#gameBoard').on('click', function () {
     movePlayer(event.target.dataset.rows, event.target.dataset.columns)
@@ -265,7 +265,8 @@ function traverseDirections(i, j) {
     let figure;
     let selectPlayer;
     function checkPlayer(a, b) {
-        for (y = 0; y < player.length; y++) {
+        let playerCheckResult;
+        for (let y = 0; y < player.length; y++) {
             playerCheckResult = $(`[data-rows=${a}][data-columns=${b}]`).hasClass(player[y]['name'])
         }
         return playerCheckResult
@@ -278,6 +279,7 @@ function traverseDirections(i, j) {
         }
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
+            fight()
         }
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
     }
@@ -289,6 +291,7 @@ function traverseDirections(i, j) {
         }
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
+            fight()
         }
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
     }
@@ -301,6 +304,7 @@ function traverseDirections(i, j) {
         }
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
+            fight()
         }
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
     }
@@ -312,6 +316,7 @@ function traverseDirections(i, j) {
         }
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
+            fight()
         }
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
     }
