@@ -1,36 +1,47 @@
 * {
     box-sizing: border-box;
+    margin:0;
+    padding:0;
 
 }
+body{
+    background:url('img/stage-cover.jpg') no-repeat center center/cover;
 
+}
 #board {
     display: grid;
-    width: 70%;
-    height: 90vh;
+    width: 60%;
+    height: 50%;
     grid-template-columns: 4fr 2fr;
     grid-gap: 5px;
     outline: 1px solid black;
-    margin: 100px auto;
+    margin: 30px auto;
+    background:white;
+    padding:30px;
 }
 
 #gameBoard {
-    height: 80vh;
-    padding: 20px 40px;
+    height: 80%;
+    padding: 10px 35px;
     display: grid;
     grid-template-columns: repeat(9, 1fr);
 
 }
 
 .square {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     outline: 1px solid #3a3939ad;
     position:relative;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    background:transparent;
 }
 
 .figure {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background: radial-gradient(circle, rgb(142, 170, 194) 10%, rgb(136, 136, 136) 90%);
     padding: 10px;
     clip-path: polygon(0% 5px, 5px 0%, calc(100% - 5px) 0%, 100% 5px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 5px 100%, 0% calc(100% - 5px));
@@ -39,52 +50,58 @@
 #playerInfo {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-
+    text-align: center;
+   
 }
 .player{
-    background:greenyellow;
+    margin:10px 0;
+    height:100%;
+    padding:10px 0;
 }
-.blue{
-    background:blue;
+#player-one-name,#player-two-name{
+    text-transform:capitalize;
 }
-.player1 {
-    /* width: 90%; */
-    background: black !important;
+.player-avatar{
+    width:35%;
+    display:block;
+    margin:0 auto;
 }
-.player2 {
-    /* width: 90%; */
-    background:purple !important;
+
+/* GAME CHARACTERS AND WEAPONS */
+.sonya,.lui-keng, .grenade,.sniper,.sword,.bow{
+    width:40px;
+    height:40px;
+    outline:none;
 }
-.weapon1 {
-    /* width: 90%; */
-    /* height: 45%;
-    padding: 10px; */
-    background: green;
+
+.highlight-path{
+    background:rgb(85, 179, 85);
 }
-.weapon2{
-    background: red;
+.sonya {
+    background:url('img/Sonya.jpg') no-repeat center center/contain !important; 
 }
-.weapon3{
-    background:brown;
+.lui-keng {  
+    background:url('img/Liu_Kang_mk11.png') no-repeat center center/contain !important;
 }
-.weapon4{
-    background:yellow;
+.grenade { 
+    background: url('img/grenade.png') no-repeat center center/cover;
+}
+.sniper{
+    background: url('img/sniper.png') no-repeat center center/cover;
+}
+.sword{
+    background:url('img/sword.png') no-repeat center center/cover;
+}
+.bow{
+    background:url('img/bow.png') no-repeat center center/cover;
 }
 
 
 
 CSS
 
-.player1 {
-    /* width: 90%; */
-    background: black !important;
-}
-.player2 {
-    /* width: 90%; */
-    background:purple !important;
-}
 
 .weapon {
     /* width: 90%; */
@@ -92,3 +109,45 @@ CSS
     padding: 10px; */
     /* background:pink; */
 }
+
+/* Battle Modal */
+.modalDialog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 100ms ease-in;
+    -moz-transition: opacity 100ms ease-in;
+    transition: opacity 100ms ease-in;
+    pointer-events: none;
+  }
+  .modalDialog:target {
+    opacity:1;
+    pointer-events: auto;
+  }
+  .modalDialog > div {
+    max-width: 800px;
+    width: 90%;
+    position: relative;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 3px;
+    background: #fff;
+  }
+  
+  /* Players Position During Battle */
+
+  .fight-position{
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      width:100%;
+      padding:0 40px;
+  }
+  .player-poster{
+      width:20%;
+  }

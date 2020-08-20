@@ -6,7 +6,7 @@
 function createGameBoard() {
     for (let i = 1; i < 10; i++) {
         for (let j = 1; j < 10; j++) {
-            $('#gameBoard').append(`<div class="square" data-rows=${i} data-columns=${j}>${i},${j}</div>`)
+            $('#gameBoard').append(`<div class="square" data-rows=${i} data-columns=${j}></div>`)
         }
     }
 }
@@ -17,27 +17,28 @@ function randomNumber(min, max) {
 
 
 const weapons = [{
-    name: 'weapon1',
+    name: 'grenade',
     power: 60,
     img: ''
 }, {
-    name: 'weapon2',
+    name: 'sniper',
     power: 50,
     img: ''
 }, {
-    name: 'weapon3',
+    name: 'sword',
     power: 40,
     img: ''
 }, {
-    name: 'weapon4',
+    name: 'bow',
     power: 30,
     img: ''
 }]
 const player = [{
-    name: 'player1',
+    name: 'sonya',
     lifepoint: 100,
+    attack: 10,
     weapon: {
-        name: 'weapon',
+        name: 'Fist',
         power: 10,
         img: ''
     },
@@ -46,10 +47,11 @@ const player = [{
         column: 0
     }
 }, {
-    name: 'player2',
+    name: 'lui-keng',
     lifepoint: 100,
+    attack: 10,
     weapon: {
-        name: 'weapon',
+        name: 'Fist',
         power: 10,
         img: ''
     },
@@ -60,6 +62,7 @@ const player = [{
 }]
 const barrier = { name: "figure" }
 
+//Place items on the Board
 function placeItem(item) {
     let isOccupied = ""
     let row = randomNumber(1, 9);
@@ -73,26 +76,31 @@ function placeItem(item) {
         selectedSquare.addClass(item['name']).addClass('occupied');
     }
 }
-
+//Function to loop through the barriers
 function renderBarriers() {
     for (var i = 0; i < 12; i++) {
         placeItem(barrier);
     }
 }
+
+//Function to loop through the player array
 function renderPlayers() {
     for (var i = 0; i < player.length; i++) {
         placeItem(player[i]);
     }
 }
+//Function to loop through the Weapon array
 function renderWeapons() {
     for (var i = 0; i < weapons.length; i++) {
         placeItem(weapons[i]);
     }
 }
+
+
 renderBarriers();
 renderPlayers();
 renderWeapons();
-
+//Switch player Function
 let currentPlayer = player[0]
 function switchPlayer() {
     if (currentPlayer === player[0]) {
@@ -102,37 +110,7 @@ function switchPlayer() {
     }
 }
 
-// DISPLAY PLAYERS INFO ON THE GAME BOARD
-// PLAYER ONE COLOUR = BLACK
-// PLAYER TWO COLOR = PINK
 
-function playerInfo(type) {
-    let playerName;
-    let playerPoint;
-    let playerWeapon;
-    function selectElement(selectorName) {
-        return document.getElementById(selectorName)
-    }
-
-    let playerOneName = selectElement('player-one-name'), playerOneLifepoint = selectElement('player-one-lifepoint'), playerOneWeapon = selectElement('player-one-weapon')
-    let playerTwoName = selectElement('player-two-name'), playerTwoLifepoint = selectElement('player-two-lifepoint'), playerTwoWeapon = selectElement('player-two-weapon')
-    playerOneName.textContent = type[0]['name']
-    playerTwoName.textContent = type[1]['name']
-    playerOneLifepoint.textContent = type[0]['lifepoint']
-    playerTwoLifepoint.textContent = type[1]['lifepoint']
-    playerOneWeapon.textContent = type[0]['weapon']['name']
-    playerTwoWeapon.textContent = type[1]['weapon']['name']
-}
-
-function fight() {
-    //Set Player's Lifepoints
-    let playerOneLifepoint = 100;
-    let playerTwoLifepoint = 100;
-    //Set Player Action for either defend or attack
-    let playerOneAttack = false;
-    let playerTwoAttack = false;
-    console.log(currentPlayer)
-}
 
 let currentPlayerRow = currentPlayer['location']['row']
 let currentPlayerColumn = currentPlayer['location']['column']
@@ -235,19 +213,19 @@ function checkBarriers(squareRow, squareCol) {
 // If present, remove the weapon on the player
 // Add the weapon in the square to the player
 
-const pickWeapon = (i, j, weapons, weapon) => {
+const pickWeapon = (i, j, weapons) => {
     for (let x = 0; x < weapons.length; x++) {
         let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
         let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
         if (weaponPosition) {
             let oldWeapon = currentPlayer['weapon']
-            console.log(oldWeapon)
             currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] }
             selectWeaponSquare.removeClass(weapons[x]['name'])
-            selectWeaponSquare.addClass(oldWeapon['name'])
-            console.log(currentPlayer)
+            console.log(currentPlayer['weapon'])
+            selectWeaponSquare.addClass(currentPlayer['weapon']['name'])
         }
     }
+
 }
 
 $('#gameBoard').on('click', function () {
@@ -255,7 +233,7 @@ $('#gameBoard').on('click', function () {
 })
 
 function clearHighlighedSquare() {
-    return $('.blue').removeClass('blue')
+    return $('.highlight-path').removeClass('highlight-path')
 }
 
 // Function traverseSquare
@@ -264,13 +242,16 @@ function traverseDirections(i, j) {
     let highlight = ''
     let figure;
     let selectPlayer;
+    //Check if the another player lies on the path of the current player
     function checkPlayer(a, b) {
         let playerCheckResult;
         for (let y = 0; y < player.length; y++) {
+
             playerCheckResult = $(`[data-rows=${a}][data-columns=${b}]`).hasClass(player[y]['name'])
         }
         return playerCheckResult
     }
+
     for (let x = i + 1; x <= i + 3; x++) {
         selectPlayer = checkPlayer(x, j)
         figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
@@ -279,46 +260,51 @@ function traverseDirections(i, j) {
         }
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
+            window.location.href = "#fight-modal"
             fight()
         }
-        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
+        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
     }
     for (let x = i - 1; x >= i - 3; x--) {
         selectPlayer = checkPlayer(x, j)
         figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
         if (figure) {
-            break;
+            break;//Check what to do
         }
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
+            window.location.href = "#fight-modal"
             fight()
         }
-        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('blue')
+        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
     }
 
     for (let x = j + 1; x <= j + 3; x++) {
         selectPlayer = checkPlayer(i, x)
         figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
         if (figure) {
-            break;
+            break;//Check what to do
         }
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
+            window.location.href = "#fight-modal"
             fight()
         }
-        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
+        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
     }
+
     for (let x = j - 1; x >= j - 3; x--) {
         selectPlayer = checkPlayer(i, x)
         figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
         if (figure) {
-            break;
+            break;//Check what to do
         }
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
+            window.location.href = "#fight-modal"
             fight()
         }
-        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('blue')
+        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
     }
 
 }
@@ -327,3 +313,98 @@ $(document).ready(function () {
     traverseDirections(currentPlayerRow, currentPlayerColumn);
 })
 
+// DISPLAY PLAYERS INFO ON THE GAME BOARD
+// PLAYER ONE COLOUR = BLACK
+// PLAYER TWO COLOR = PINK
+
+function playerInfo(type) {
+
+    $('#player-one-name').text(type[0]['name']);
+    $('#player-two-name').text(type[1]['name']);
+    $('#player-one-lifepoint').text(type[0]['lifepoint']);
+    $('#player-two-lifepoint').text(type[1]['lifepoint']);
+    $('#player-one-weapon').text(type[0]['weapon']['name']);
+    $('#player-two-weapon').text(type[1]['weapon']['name']);
+    $('#player-one-attack-power').text(type[0]['weapon']['power']);
+    $('#player-two-attack-power').text(type[1]['weapon']['power']);
+
+}
+
+function fight() {
+
+    let playerName = currentPlayer['name']
+    //Set Player's Lifepoints
+    let playerOneLifepoint = 100;
+    let playerTwoLifepoint = 100;
+    //Set Player Action for either defend or attack
+    let playerOneDefend = false;
+    let playerTwoDefend = false;
+    $('#player1-attack').click(function () {
+
+        console.log(player)
+
+        //In case the player decides to defend
+        if (playerTwoDefend === true) {
+
+            playerTwoLifepoint -= currentPlayer.attack / 2;
+            $('#player2-lifepoint').text(playerTwoLifepoint);
+            playerTwoDefend = false;
+        } else {
+            //In case the player chooses not to defend
+            console.log(currentPlayer.attack)
+            playerTwoLifepoint -= currentPlayer.attack;
+            $('#player2-lifepoint').text(playerTwoLifepoint);
+        }
+        //When the opponent's player's life is less than or equal to 0 declare winner
+        if (playerTwoLifepoint <= 0) {
+            console.log("Player 1 wins");
+        }
+        playerName = 'lui-keng'
+        console.log(playerName)
+        playerOneDefend = false;
+        $('#defence-player1').text(playerOneDefend);
+
+    });
+
+    //Player 1 decides to defend
+    $('#player1-defend').click(function () {
+        playerOneDefend = true;
+        $('#defence-player1').text(playerOneDefend);
+        playerName = 'lui-keng'
+
+    });
+    //Player 2 decides to Attack
+    $('#player2-attack').click(function () {
+        console.log(currentPlayer)
+
+        //In case the player decides to defend
+        if (playerOneDefend === true) {
+            console.log(currentPlayer.attack)
+            playerOneLifepoint -= currentPlayer.attack / 2;
+            $('#player1-lifepoint').text(playerOneLifepoint);
+            playerOneDefend = false;
+        } else {
+            //In case the player chooses not to defend
+            console.log(currentPlayer.attack)
+            playerOneLifepoint -= currentPlayer.attack;
+            $('#player1-lifepoint').text(playerOneLifepoint);
+        }
+        //When the opponent's player's life is less than or equal to 0 declare winner
+        if (playerOneLifepoint <= 0) {
+            console.log("Player 2 wins");
+
+        }
+        playerName = 'sonya'
+        console.log(playerName)
+        playerOneDefend = false;
+        $('#defence-player1').text(playerOneDefend);
+
+    });
+    $('#player2-defend').click(function () {
+        playerTwoDefend = true; //Player 2 decides to defend
+        $('#defence-player1').text(playerTwoDefend);
+        playerName = 'sonya'
+
+    });
+
+}

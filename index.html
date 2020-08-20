@@ -10,39 +10,114 @@
 </head>
 
 <body>
-    <div id="board">
-        <div id="gameBoard">
+
+    <div id="main-interface">
+        <div style="color:white;text-align:center;">
+            <h2>Virtual Kombat</h2>
         </div>
-        <!-- Your Webgage Content Goes Here -->
-        <div id="playerInfo">
-            <div id="first" class="player">
-                <h1>Name:
-                    <span id="player-one-name"></span>
-                </h1>
-                <p>Lifepoint:
-                    <span id="player-one-lifepoint"></span>
-                </p>
-                <p>Weapon:
-                    <span id="player-one-weapon"></span>
-                </p>
-                <button disabled type="button" id="playerOneAttack">Attack</button>
-                <button disabled type="button" id="playerOneDefend">Defend</button>
+        <div id="board">
+            <div id="gameBoard">
             </div>
-            <div id="second" class="player">
-                <h1>Name:
-                    <span id="player-two-name"></span>
-                </h1>
-                <p>Lifepoint:
-                    <span id="player-two-lifepoint"></span>
-                </p>
-                <p>Weapon:
-                    <span id="player-two-weapon"></span>
-                </p>
-                <button disabled type="button" id="playerTwoAttack">Attack</button>
-                <button disabled type="button" id="playerTwoDefend">Defend</button>
+            <!-- Your Webgage Content Goes Here -->
+            <div id="playerInfo">
+                <div id="first" class="player">
+                    <h3>Name:
+                        <span id="player-one-name"></span>
+                    </h3>
+                    <img class="player-avatar" src="img/Sonya.jpg" alt="Player-1 Sonya">
+                    <p>Lifepoint:
+                        <span id="player-one-lifepoint"></span>
+                    </p>
+                    <p>Weapon:
+                        <span id="player-one-weapon"></span>
+                    </p>
+                    <p>Attack power:
+                        <span id="player-one-attack-power"></span>
+                    </p>
+
+                </div>
+                <div id="second" class="player">
+                    <h3>Name:
+                        <span id="player-two-name"></span>
+                    </h3>
+                    <img class="player-avatar" src="img/Liu_Kang_mk11.png" alt="Player-2 Liu Keng">
+                    <p>Lifepoint:
+                        <span id="player-two-lifepoint"></span>
+                    </p>
+
+                    <p>Weapon:
+                        <span id="player-two-weapon"></span>
+                    </p>
+                    <p>Attack power:
+                        <span id="player-two-attack-power"></span>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal for Game Rule -->
+
+    <!-- Modal For Fight -->
+    <div id="fight-modal" class="modalDialog">
+        <div>
+            <a href="index.html" title="close" class="close">X</a>
+            <h2 align="center">Let the Quest for Supremacy!</h2>
+            <hr>
+            <div class="fight-position">
+                <div id="player1-position">
+                    <div>
+                        <h2>Player 1</h2>
+                    </div>
+                    <img class="player-poster" src="img/Sonya.jpg" alt="Sonya">
+                    <div class="life-points">
+                        <strong>Life points: </strong>
+                        <span id="player1-lifepoint">100</span>
+                    </div>
+                    <div style="margin-left:35%; width: 76px; height: 76px;" class="player1-attack-weapon">
+                        <div>
+                            <strong>Attack power: </strong>
+                            <span class="attack-power-player1">10</span>
+                        </div>
+                        <div>
+                            <strong>Defence:</strong>
+                            <span id="defence-player1">false</span>
+                        </div>
+                        <br>
+                        <button id="player1-attack" class="button">Attack</button>
+                        <button id="player1-defend" class="button">Defend</button>
+                    </div>
+                </div>
+                <!--Player 2 -->
+                <div id="player2-position">
+                    <div>
+                        <h2>Player 2</h2>
+                    </div>
+                    <img class="player-poster" src="img/Liu_Kang_mk11.png" alt="Lui-Keng">
+                    <div class="life-points">
+                        <strong>Life points:</strong>
+                        <span id="player2-lifepoint">100</span>
+                    </div>
+                    <div style="margin-left:35%; width: 76px; height: 76px;" class="attack-weapon-player2">
+                    </div>
+                    <div>
+                        <strong>Attack power: </strong>
+                        <span class="attack-power-player2">10</span>
+                    </div>
+                    <div>
+                        <strong>Defence:</strong>
+                        <span id="defence-player2">false</span>
+                    </div>
+                    <br>
+                    <button id="player2-attack" class="button red">Attack</button>
+                    <button id="player2-defend" class="button blue">Defend</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal for Game End -->
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="gameLogic.js"></script>
     <script src="player.js"></script>
