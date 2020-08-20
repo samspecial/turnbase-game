@@ -397,12 +397,12 @@ function fight() {
         playerName = 'sonya'
         console.log(playerName)
         playerOneDefend = false;
-        $('#defence-player1').text(playerOneDefend);
+        $('#defence-player2').text(playerOneDefend);
 
     });
     $('#player2-defend').click(function () {
         playerTwoDefend = true; //Player 2 decides to defend
-        $('#defence-player1').text(playerTwoDefend);
+        $('#defence-player2').text(playerTwoDefend);
         playerName = 'sonya'
 
     });
