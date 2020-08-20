@@ -39,14 +39,6 @@ body{
     background:transparent;
 }
 
-.figure {
-    width: 50px;
-    height: 50px;
-    background: radial-gradient(circle, rgb(142, 170, 194) 10%, rgb(136, 136, 136) 90%);
-    padding: 10px;
-    clip-path: polygon(0% 5px, 5px 0%, calc(100% - 5px) 0%, 100% 5px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 5px 100%, 0% calc(100% - 5px));
-}
-
 #playerInfo {
     display: flex;
     flex-direction: column;
@@ -70,7 +62,7 @@ body{
 }
 
 /* GAME CHARACTERS AND WEAPONS */
-.sonya,.lui-keng, .grenade,.sniper,.sword,.bow{
+.sonya,.lui-keng, .grenade,.sniper,.sword,.bow,.figure{
     width:40px;
     height:40px;
     outline:none;
@@ -78,6 +70,9 @@ body{
 
 .highlight-path{
     background:rgb(85, 179, 85);
+}
+.figure{
+    background:url('img/brick.png') no-repeat center center/contain;
 }
 .sonya {
     background:url('img/Sonya.jpg') no-repeat center center/contain !important; 
