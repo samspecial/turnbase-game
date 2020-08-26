@@ -218,14 +218,15 @@ const pickWeapon = (i, j, weapons) => {
         let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
         let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
         if (weaponPosition) {
-            let oldWeapon = currentPlayer['weapon']
-            currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] }
-            selectWeaponSquare.removeClass(weapons[x]['name'])
-            console.log(currentPlayer['weapon'])
-            selectWeaponSquare.addClass(currentPlayer['weapon']['name'])
+            let oldWeapon = currentPlayer['weapon'];
+            console.log('Previous weapon', oldWeapon)
+            currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] };
+            console.log('New weapon', currentPlayer['weapon'])
+            selectWeaponSquare.removeClass(weapons[x]['name']);
+
+            selectWeaponSquare.addClass(oldWeapon['name']);
         }
     }
-
 }
 
 $('#gameBoard').on('click', function () {
@@ -238,6 +239,7 @@ function clearHighlighedSquare() {
 
 // Function traverseSquare
 function traverseDirections(i, j) {
+
     playerInfo(player)
     let highlight = ''
     let figure;
@@ -319,14 +321,16 @@ $(document).ready(function () {
 
 function playerInfo(type) {
 
-    $('#player-one-name').text(type[0]['name']);
-    $('#player-two-name').text(type[1]['name']);
+    $('.player-one-name').text(type[0]['name']);
+    $('.player-two-name').text(type[1]['name']);
     $('#player-one-lifepoint').text(type[0]['lifepoint']);
     $('#player-two-lifepoint').text(type[1]['lifepoint']);
     $('#player-one-weapon').text(type[0]['weapon']['name']);
     $('#player-two-weapon').text(type[1]['weapon']['name']);
     $('#player-one-attack-power').text(type[0]['weapon']['power']);
     $('#player-two-attack-power').text(type[1]['weapon']['power']);
+    $('#attack-power-player1').text(type[0]['weapon']['power']);
+    $('#attack-power-player2').text(type[1]['weapon']['power']);
 
 }
 
@@ -339,20 +343,19 @@ function fight() {
     //Set Player Action for either defend or attack
     let playerOneDefend = false;
     let playerTwoDefend = false;
-    $('#player1-attack').click(function () {
 
-        console.log(player)
+    $('#player1-attack').click(function () {
 
         //In case the player decides to defend
         if (playerTwoDefend === true) {
 
-            playerTwoLifepoint -= currentPlayer.attack / 2;
+            playerTwoLifepoint -= currentPlayer.weapon.power / 2;
             $('#player2-lifepoint').text(playerTwoLifepoint);
             playerTwoDefend = false;
         } else {
             //In case the player chooses not to defend
-            console.log(currentPlayer.attack)
-            playerTwoLifepoint -= currentPlayer.attack;
+            console.log(currentPlayer.weapon.power)
+            playerTwoLifepoint -= currentPlayer.weapon.power;
             $('#player2-lifepoint').text(playerTwoLifepoint);
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
@@ -360,10 +363,9 @@ function fight() {
             console.log("Player 1 wins");
         }
         playerName = 'lui-keng'
-        console.log(playerName)
+        console.log('Next to play', playerName)
         playerOneDefend = false;
         $('#defence-player1').text(playerOneDefend);
-
     });
 
     //Player 1 decides to defend
@@ -371,22 +373,21 @@ function fight() {
         playerOneDefend = true;
         $('#defence-player1').text(playerOneDefend);
         playerName = 'lui-keng'
-
     });
+
     //Player 2 decides to Attack
     $('#player2-attack').click(function () {
-        console.log(currentPlayer)
-
+        console.log(playerName)
         //In case the player decides to defend
         if (playerOneDefend === true) {
-            console.log(currentPlayer.attack)
-            playerOneLifepoint -= currentPlayer.attack / 2;
+            console.log(currentPlayer.weapon.power)
+            playerOneLifepoint -= currentPlayer.weapon.power / 2;
             $('#player1-lifepoint').text(playerOneLifepoint);
             playerOneDefend = false;
         } else {
             //In case the player chooses not to defend
-            console.log(currentPlayer.attack)
-            playerOneLifepoint -= currentPlayer.attack;
+            console.log(currentPlayer.weapon.power)
+            playerOneLifepoint -= currentPlayer.weapon.power;
             $('#player1-lifepoint').text(playerOneLifepoint);
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
