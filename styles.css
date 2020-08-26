@@ -52,8 +52,11 @@ body{
     height:100%;
     padding:10px 0;
 }
-#player-one-name,#player-two-name{
+.player-one-name,.player-two-name{
     text-transform:capitalize;
+    font-size:2rem;
+    margin-bottom:10px;
+    font-weight:700;
 }
 .player-avatar{
     width:35%;
@@ -93,7 +96,9 @@ body{
     background:url('img/bow.png') no-repeat center center/cover;
 }
 
-
+.fist{
+    background:red;
+}
 
 CSS
 
@@ -144,5 +149,6 @@ CSS
       padding:0 40px;
   }
   .player-poster{
-      width:20%;
+      height:175px;
+      width:125px;
   }

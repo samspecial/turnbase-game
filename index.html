@@ -21,9 +21,11 @@
             <!-- Your Webgage Content Goes Here -->
             <div id="playerInfo">
                 <div id="first" class="player">
-                    <h3>Name:
-                        <span id="player-one-name"></span>
-                    </h3>
+
+                    <strong>
+                        <span class="player-one-name"></span>
+                    </strong>
+
                     <img class="player-avatar" src="img/Sonya.jpg" alt="Player-1 Sonya">
                     <p>Lifepoint:
                         <span id="player-one-lifepoint"></span>
@@ -37,9 +39,9 @@
 
                 </div>
                 <div id="second" class="player">
-                    <h3>Name:
-                        <span id="player-two-name"></span>
-                    </h3>
+                    <strong>
+                        <span class="player-two-name"></span>
+                    </strong>
                     <img class="player-avatar" src="img/Liu_Kang_mk11.png" alt="Player-2 Liu Keng">
                     <p>Lifepoint:
                         <span id="player-two-lifepoint"></span>
@@ -62,38 +64,37 @@
     <div id="fight-modal" class="modalDialog">
         <div>
             <a href="index.html" title="close" class="close">X</a>
-            <h2 align="center">Let the Quest for Supremacy!</h2>
+            <h2 align="center">Supremacy Fight!!!</h2>
             <hr>
             <div class="fight-position">
                 <div id="player1-position">
-                    <div>
-                        <h2>Player 1</h2>
-                    </div>
-                    <img class="player-poster" src="img/Sonya.jpg" alt="Sonya">
+                    <h2 class="player-one-name"></h2>
+
+                    <img class="player-poster" src="img/Sonya.jpg" alt="Sonya" />
                     <div class="life-points">
                         <strong>Life points: </strong>
                         <span id="player1-lifepoint">100</span>
                     </div>
                     <div style="margin-left:35%; width: 76px; height: 76px;" class="player1-attack-weapon">
-                        <div>
-                            <strong>Attack power: </strong>
-                            <span class="attack-power-player1">10</span>
-                        </div>
-                        <div>
-                            <strong>Defence:</strong>
-                            <span id="defence-player1">false</span>
-                        </div>
-                        <br>
-                        <button id="player1-attack" class="button">Attack</button>
-                        <button id="player1-defend" class="button">Defend</button>
                     </div>
+                    <div>
+                        <strong>Attack power: </strong>
+                        <span id="attack-power-player1">10</span>
+                    </div>
+                    <div>
+                        <strong>Defence:</strong>
+                        <span id="defence-player1">false</span>
+                    </div>
+                    <br>
+                    <button id="player1-attack" class="button">Attack</button>
+                    <button id="player1-defend" class="button">Defend</button>
                 </div>
+
                 <!--Player 2 -->
                 <div id="player2-position">
-                    <div>
-                        <h2>Player 2</h2>
-                    </div>
-                    <img class="player-poster" src="img/Liu_Kang_mk11.png" alt="Lui-Keng">
+
+                    <h2 class="player-two-name"></h2>
+                    <img class="player-poster" src="img/Liu_Kang_mk11.png" alt="Lui-Keng" />
                     <div class="life-points">
                         <strong>Life points:</strong>
                         <span id="player2-lifepoint">100</span>
@@ -102,7 +103,7 @@
                     </div>
                     <div>
                         <strong>Attack power: </strong>
-                        <span class="attack-power-player2">10</span>
+                        <span id="attack-power-player2">10</span>
                     </div>
                     <div>
                         <strong>Defence:</strong>
