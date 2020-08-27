@@ -225,6 +225,7 @@ const pickWeapon = (i, j, weapons) => {
             selectWeaponSquare.removeClass(weapons[x]['name']);
 
             selectWeaponSquare.addClass(oldWeapon['name']);
+            break;
         }
     }
 }
