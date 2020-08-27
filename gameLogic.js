@@ -214,6 +214,7 @@ function checkBarriers(squareRow, squareCol) {
 // Add the weapon in the square to the player
 
 const pickWeapon = (i, j, weapons) => {
+
     for (let x = 0; x < weapons.length; x++) {
         let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
         let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
@@ -225,6 +226,7 @@ const pickWeapon = (i, j, weapons) => {
             selectWeaponSquare.removeClass(weapons[x]['name']);
 
             selectWeaponSquare.addClass(oldWeapon['name']);
+            break;
         }
     }
 }
