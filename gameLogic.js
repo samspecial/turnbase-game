@@ -241,17 +241,18 @@ function clearHighlighedSquare() {
 
 // Function traverseSquare
 function traverseDirections(i, j) {
-
     playerInfo(player)
     let highlight = ''
     let figure;
     let selectPlayer;
+
     //Check if the another player lies on the path of the current player
     function checkPlayer(a, b) {
         let playerCheckResult;
         for (let y = 0; y < player.length; y++) {
-
-            playerCheckResult = $(`[data-rows=${a}][data-columns=${b}]`).hasClass(player[y]['name'])
+            playerCheckResult = $(`[data-rows=${a}][data-columns=${b}]`).hasClass(player[y]['name']);
+            console.log(player[y]['name'])
+            break;
         }
         return playerCheckResult
     }
@@ -265,7 +266,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight()
+            fight(currentPlayer)
         }
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
     }
@@ -278,7 +279,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight()
+            fight(currentPlayer)
         }
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
     }
@@ -292,7 +293,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight()
+            fight(currentPlayer)
         }
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
     }
@@ -306,7 +307,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight()
+            fight(currentPlayer)
         }
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
     }
@@ -336,9 +337,9 @@ function playerInfo(type) {
 
 }
 
-function fight() {
+function fight(playerIdentity) {
 
-    let playerName = currentPlayer['name']
+    let playerName = playerIdentity['name']
     //Set Player's Lifepoints
     let playerOneLifepoint = 100;
     let playerTwoLifepoint = 100;
@@ -347,25 +348,32 @@ function fight() {
     let playerTwoDefend = false;
 
     $('#player1-attack').click(function () {
-
+        let playerTurnToFight = player.find(play => {
+            return play['name'] === playerName
+        })
+        console.log(playerTurnToFight)
         //In case the player decides to defend
         if (playerTwoDefend === true) {
-
-            playerTwoLifepoint -= currentPlayer.weapon.power / 2;
+            console.log('Player 2 defend:', playerTurnToFight)
+            playerTwoLifepoint -= playerTurnToFight.weapon.power / 2;
             $('#player2-lifepoint').text(playerTwoLifepoint);
             playerTwoDefend = false;
         } else {
             //In case the player chooses not to defend
-            console.log(currentPlayer.weapon.power)
-            playerTwoLifepoint -= currentPlayer.weapon.power;
+            // console.log(playerTurnToFight.weapon.power)
+            console.log('Player 2 didn\'t defend:', playerTurnToFight)
+            playerTwoLifepoint -= playerTurnToFight.weapon.power;
             $('#player2-lifepoint').text(playerTwoLifepoint);
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
         if (playerTwoLifepoint <= 0) {
             console.log("Player 1 wins");
+
+            $('#winner').text(playerName);
+            window.location.href = '#game-over'
         }
-        playerName = 'lui-keng'
-        console.log('Next to play', playerName)
+        playerName = 'lui-keng';
+        buttonControl(playerName);
         playerOneDefend = false;
         $('#defence-player1').text(playerOneDefend);
     });
@@ -374,40 +382,63 @@ function fight() {
     $('#player1-defend').click(function () {
         playerOneDefend = true;
         $('#defence-player1').text(playerOneDefend);
-        playerName = 'lui-keng'
+        playerName = 'lui-keng';
+        buttonControl(playerName);
     });
 
     //Player 2 decides to Attack
     $('#player2-attack').click(function () {
-        console.log(playerName)
+        let playerTurnToFight = player.find(play => {
+
+            return play['name'] === playerName
+        })
         //In case the player decides to defend
         if (playerOneDefend === true) {
-            console.log(currentPlayer.weapon.power)
-            playerOneLifepoint -= currentPlayer.weapon.power / 2;
+
+            console.log('Player 1 defend:', playerTurnToFight)
+            playerOneLifepoint -= playerTurnToFight.weapon.power / 2;
             $('#player1-lifepoint').text(playerOneLifepoint);
             playerOneDefend = false;
         } else {
             //In case the player chooses not to defend
-            console.log(currentPlayer.weapon.power)
-            playerOneLifepoint -= currentPlayer.weapon.power;
+
+            console.log('Player 1 didn\'t defend:', playerTurnToFight)
+            playerOneLifepoint -= playerTurnToFight.weapon.power;
             $('#player1-lifepoint').text(playerOneLifepoint);
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
         if (playerOneLifepoint <= 0) {
             console.log("Player 2 wins");
-
+            $('#winner').text(playerName);
+            window.location.href = '#game-over'
         }
         playerName = 'sonya'
-        console.log(playerName)
-        playerOneDefend = false;
-        $('#defence-player2').text(playerOneDefend);
+        buttonControl(playerName)
+        playerTwoDefend = false;
+        $('#defence-player2').text(playerTwoDefend);
 
     });
     $('#player2-defend').click(function () {
         playerTwoDefend = true; //Player 2 decides to defend
         $('#defence-player2').text(playerTwoDefend);
         playerName = 'sonya'
-
+        buttonControl(playerName)
     });
 
+}
+// Set the Button properties duriing Fight
+function buttonControl(playerName) {
+    if (playerName === 'sonya') {
+        $('#player1-attack').css({ opacity: 1, cursor: "auto", disabled: false });
+        $('#player1-defend').css({ opacity: 1, cursor: "auto", disabled: false });
+
+        $('#player2-attack').css({ opacity: ".5", cursor: "not-allowed", disabled: true });
+        $('#player2-defend').css({ opacity: ".5", cursor: "not-allowed", disabled: true });
+    } else {
+        $('#player1-attack').css({ opacity: ".5", cursor: "not-allowed", disabled: true });
+        $('#player1-defend').css({ opacity: ".5", cursor: "not-allowed", disabled: true });
+
+        $('#player2-attack').css({ opacity: 1, cursor: "auto", disabled: false });
+        $('#player2-defend').css({ opacity: 1, cursor: "auto", disabled: false });
+    }
 }
