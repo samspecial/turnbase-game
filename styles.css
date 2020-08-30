@@ -111,7 +111,7 @@ CSS
 }
 
 /* Battle Modal */
-.modalDialog {
+.modalDialog,#game-over {
     position: fixed;
     top: 0;
     right: 0;
@@ -125,9 +125,19 @@ CSS
     transition: opacity 100ms ease-in;
     pointer-events: none;
   }
-  .modalDialog:target {
+  .modalDialog:target, #game-over:target {
     opacity:1;
     pointer-events: auto;
+  }
+
+  #game-over > div{
+    max-width: 400px;
+    width: 70%;
+    position: relative;
+    margin: 17% auto;
+    padding: 20px;
+    border-radius: 3px;
+    background: #fff;
   }
   .modalDialog > div {
     max-width: 800px;
