@@ -234,7 +234,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight(currentPlayer)
+            fight()
         }
     }
     for (let x = i - 1; x >= i - 3; x--) {
@@ -248,7 +248,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight(currentPlayer)
+            fight()
         }
     }
 
@@ -263,7 +263,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight(currentPlayer)
+            fight()
         }
     }
     for (let x = j - 1; x >= j - 3; x--) {
@@ -277,7 +277,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight(currentPlayer)
+            fight()
         }
     }
 }
@@ -301,9 +301,9 @@ function playerInfo(type) {
     $('#attack-power-player2').text(type[1]['weapon']['power']);
 }
 
-function fight(playerIdentity) {
+function fight() {
     // console.log(playerIdentity)
-    let playerName = playerIdentity['name']
+    let playerName = currentPlayer['name']
     //Set Player's Lifepoints
     let playerOneLifepoint = 100;
     let playerTwoLifepoint = 100;
@@ -331,7 +331,8 @@ function fight(playerIdentity) {
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
         if (playerTwoLifepoint <= 0) {
-            $('#winner').text(playerName);
+            $('#avatar').append('<img style="width:20%; margin:0 auto; display:block;" src="img/Sonya.jpg" alt="Player-1 Poster" />')
+            $('#winner').text(`${playerName} wins`);
             window.location.href = '#game-over'
         }
         playerName = 'lui-keng';
@@ -371,8 +372,9 @@ function fight(playerIdentity) {
         //When the opponent's player's life is less than or equal to 0 declare winner
         if (playerOneLifepoint <= 0) {
             console.log("Player 2 wins");
-            $('#winner').text(playerName);
-            window.location.href = '#game-over'
+            $('#avatar').append('<img style="width:20%; margin:0 auto; display:block;" src="img/Liu_Kang_mk11.png" alt="Player-2 Poster" />');
+            $('#winner').text(`${playerName} wins`);
+            window.location.href = '#game-over';
         }
         playerName = 'sonya'
         buttonControl(playerName)

@@ -134,7 +134,7 @@ CSS
     max-width: 400px;
     width: 70%;
     position: relative;
-    margin: 17% auto;
+    margin: 15% auto;
     padding: 20px;
     border-radius: 3px;
     background: #fff;
@@ -162,3 +162,13 @@ CSS
       height:175px;
       width:125px;
   }
+#winner{
+    text-transform: capitalize;
+}
+.game-over-box{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    
+}
