@@ -1,7 +1,3 @@
-// import { Player } from './player'
-// const me = new Player('bayo', { name: 'Sam', power: 20 }, { row: 0, column: 0 }, 100)
-// console.log(me)
-
 // Function to Generate Game Board of 9 by 9
 function createGameBoard() {
     for (let i = 1; i < 10; i++) {
@@ -14,7 +10,6 @@ createGameBoard();
 function randomNumber(min, max) {
     return Math.floor(Math.random() * max) + min;
 }
-
 
 const weapons = [{
     name: 'grenade',
@@ -96,7 +91,6 @@ function renderWeapons() {
     }
 }
 
-
 renderBarriers();
 renderPlayers();
 renderWeapons();
@@ -150,14 +144,7 @@ function validMove(squareRow, squareCol) {
     return canMove
 }
 
-// Select a new square
-// Determine the number of squares the player will move through to get to the square
-// Look at each square to see if it contains a barrier class
-// If a barrier class is found
-//     alert the user of a wrong move
-//   End
-//     Else Move to the next square
-// Repeat step 3
+// Barrier Check for Player Movement
 function checkBarriers(squareRow, squareCol) {
     const playerCol = currentPlayer['location']['column'];
     const playerRow = currentPlayer['location']['row'];
@@ -201,11 +188,7 @@ function checkBarriers(squareRow, squareCol) {
         }
     }
 }
-// Select a square by passing the value of i and j
-// Check for a class of weapon on the square
-// If present, remove the weapon on the player
-// Add the weapon in the square to the player
-
+// Pick New Weapon
 const pickWeapon = (i, j, weapons) => {
 
     for (let x = 0; x < weapons.length; x++) {
@@ -304,9 +287,6 @@ $(document).ready(function () {
 })
 
 // DISPLAY PLAYERS INFO ON THE GAME BOARD
-// PLAYER ONE COLOUR = BLACK
-// PLAYER TWO COLOR = PINK
-
 function playerInfo(type) {
 
     $('.player-one-name').text(type[0]['name']);
@@ -319,9 +299,6 @@ function playerInfo(type) {
     $('#player-two-attack-power').text(type[1]['weapon']['power']);
     $('#attack-power-player1').text(type[0]['weapon']['power']);
     $('#attack-power-player2').text(type[1]['weapon']['power']);
-    $('.attack-weapon-player1').css('background-image', type[0]['weapon']['img'])
-    $('.attack-weapon-player2').css('background-image', type[1]['weapon']['img'])
-
 }
 
 function fight(playerIdentity) {
