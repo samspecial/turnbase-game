@@ -75,7 +75,7 @@
                         <strong>Life points: </strong>
                         <span id="player1-lifepoint">100</span>
                     </div>
-                    <div style="margin-left:35%; width: 76px; height: 76px;" class="player1-attack-weapon">
+                    <div style="width: 76px; height: 76px;" class="attack-weapon-player1">
                     </div>
                     <div>
                         <strong>Attack power: </strong>
@@ -99,7 +99,7 @@
                         <strong>Life points:</strong>
                         <span id="player2-lifepoint">100</span>
                     </div>
-                    <div style="margin-left:35%; width: 76px; height: 76px;" class="attack-weapon-player2">
+                    <div style="width: 76px; height: 76px;" class="attack-weapon-player2">
                     </div>
                     <div>
                         <strong>Attack power: </strong>
@@ -117,6 +117,20 @@
         </div>
     </div>
 
+    <!-- Game Over -->
+    <div id="game-over">
+        <div class='game-over-box'>
+            <a href="index.html" title="Close">X</a>
+            <h2>Game Over! Fight Ends</h2>
+            <div id="avatar"></div>
+            <h4 id="winner">
+            </h4>
+            <a href="index.html">
+                <button class="button" title="Start new game">New game</button>
+            </a>
+            </p>
+        </div>
+    </div>
 
     <!-- Modal for Game End -->
     <script src="js/jquery-1.11.3.min.js"></script>

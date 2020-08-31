@@ -1,7 +1,3 @@
-// import { Player } from './player'
-// const me = new Player('bayo', { name: 'Sam', power: 20 }, { row: 0, column: 0 }, 100)
-// console.log(me)
-
 // Function to Generate Game Board of 9 by 9
 function createGameBoard() {
     for (let i = 1; i < 10; i++) {
@@ -15,23 +11,22 @@ function randomNumber(min, max) {
     return Math.floor(Math.random() * max) + min;
 }
 
-
 const weapons = [{
     name: 'grenade',
     power: 60,
-    img: ''
+    img: 'img/grenade.png'
 }, {
     name: 'sniper',
     power: 50,
-    img: ''
+    img: 'img/sniper.png'
 }, {
     name: 'sword',
     power: 40,
-    img: ''
+    img: 'img/sword.png'
 }, {
     name: 'bow',
     power: 30,
-    img: ''
+    img: 'img/bow.png'
 }]
 const player = [{
     name: 'sonya',
@@ -40,7 +35,7 @@ const player = [{
     weapon: {
         name: 'Fist',
         power: 10,
-        img: ''
+        img: 'img/brick.png'
     },
     location: {
         row: 0,
@@ -53,7 +48,7 @@ const player = [{
     weapon: {
         name: 'Fist',
         power: 10,
-        img: ''
+        img: 'img/brick.png'
     },
     location: {
         row: 0,
@@ -96,10 +91,10 @@ function renderWeapons() {
     }
 }
 
-
 renderBarriers();
 renderPlayers();
 renderWeapons();
+
 //Switch player Function
 let currentPlayer = player[0]
 function switchPlayer() {
@@ -110,14 +105,11 @@ function switchPlayer() {
     }
 }
 
-
-
 let currentPlayerRow = currentPlayer['location']['row']
 let currentPlayerColumn = currentPlayer['location']['column']
 function movePlayer(newRow, newColumn) {
     let currentPlayerRow = currentPlayer['location']['row']
     let currentPlayerColumn = currentPlayer['location']['column']
-    console.log(currentPlayer)
     let playerRow = parseInt(newRow, 10);
     let playerColumn = parseInt(newColumn, 10);
 
@@ -133,8 +125,7 @@ function movePlayer(newRow, newColumn) {
         clearHighlighedSquare();
 
         switchPlayer();
-        traverseDirections(parseInt(currentPlayer['location']['row'], 10), parseInt(currentPlayer['location']['column'], 10))
-        // 
+        traverseDirections(parseInt(currentPlayer['location']['row'], 10), parseInt(currentPlayer['location']['column'], 10));
     } else {
         alert("Wrong Move")
     }
@@ -153,30 +144,19 @@ function validMove(squareRow, squareCol) {
     return canMove
 }
 
-// Select a new square
-// Determine the number of squares the player will move through to get to the square
-// Look at each square to see if it contains a barrier class
-// If a barrier class is found
-//     alert the user of a wrong move
-//   End
-//     Else Move to the next square
-// Repeat step 3
+// Barrier Check for Player Movement
 function checkBarriers(squareRow, squareCol) {
     const playerCol = currentPlayer['location']['column'];
     const playerRow = currentPlayer['location']['row'];
-
     const direction = (squareRow === playerRow) ? 'column' : 'row';
-    console.log(direction)
-    console.log(squareRow + squareCol)
     const columnChange = playerCol - squareCol;
-    console.log(columnChange)
     const rowChange = playerRow - squareRow;
     let thisSquare = ''
+
     if (direction === 'column') {
         if (columnChange <= 0) {
             for (let i = parseInt(playerCol, 10) + 1; i <= squareCol; i++) {
-                console.log(typeof (squareCol))
-                console.log(typeof (playerCol))
+
                 thisSquare = $(`[data-rows=${playerRow}][data-columns=${i}]`).hasClass('figure')
                 if (thisSquare) {
                     return true
@@ -208,11 +188,7 @@ function checkBarriers(squareRow, squareCol) {
         }
     }
 }
-// Select a square by passing the value of i and j
-// Check for a class of weapon on the square
-// If present, remove the weapon on the player
-// Add the weapon in the square to the player
-
+// Pick New Weapon
 const pickWeapon = (i, j, weapons) => {
 
     for (let x = 0; x < weapons.length; x++) {
@@ -220,97 +196,90 @@ const pickWeapon = (i, j, weapons) => {
         let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
         if (weaponPosition) {
             let oldWeapon = currentPlayer['weapon'];
-            console.log('Previous weapon', oldWeapon)
             currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] };
-            console.log('New weapon', currentPlayer['weapon'])
             selectWeaponSquare.removeClass(weapons[x]['name']);
-
             selectWeaponSquare.addClass(oldWeapon['name']);
             break;
         }
     }
 }
-
+// Select a Square on the Gameboard
 $('#gameBoard').on('click', function () {
     movePlayer(event.target.dataset.rows, event.target.dataset.columns)
 })
-
+// Clear Highlighted Square Colour after Player has made a Valid move
 function clearHighlighedSquare() {
     return $('.highlight-path').removeClass('highlight-path')
 }
 
 // Function traverseSquare
 function traverseDirections(i, j) {
-
     playerInfo(player)
     let highlight = ''
     let figure;
     let selectPlayer;
+
     //Check if the another player lies on the path of the current player
-    function checkPlayer(a, b) {
-        let playerCheckResult;
-        for (let y = 0; y < player.length; y++) {
-
-            playerCheckResult = $(`[data-rows=${a}][data-columns=${b}]`).hasClass(player[y]['name'])
-        }
-        return playerCheckResult
-    }
-
+    let findPlayer = player.find(play => {
+        return play['name'] !== currentPlayer['name']
+    })
+    console.log(findPlayer['name']);
     for (let x = i + 1; x <= i + 3; x++) {
-        selectPlayer = checkPlayer(x, j)
         figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
         if (figure) {
             break; // Check what to do
         }
+        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
+        selectPlayer = $(`[data-rows=${x}][data-columns=${j}]`).hasClass(findPlayer['name']);
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
             fight()
         }
-        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
     }
     for (let x = i - 1; x >= i - 3; x--) {
-        selectPlayer = checkPlayer(x, j)
+
         figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
         if (figure) {
             break;//Check what to do
         }
+        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
+        selectPlayer = $(`[data-rows=${x}][data-columns=${j}]`).hasClass(findPlayer['name']);
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
             fight()
         }
-        highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
     }
 
     for (let x = j + 1; x <= j + 3; x++) {
-        selectPlayer = checkPlayer(i, x)
+
         figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
         if (figure) {
             break;//Check what to do
         }
+        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
+        selectPlayer = $(`[data-rows=${i}][data-columns=${x}]`).hasClass(findPlayer['name']);
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
             fight()
         }
-        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
     }
-
     for (let x = j - 1; x >= j - 3; x--) {
-        selectPlayer = checkPlayer(i, x)
+        // selectPlayer = checkPlayer(i, x)
         figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
         if (figure) {
             break;//Check what to do
         }
+        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
+        selectPlayer = $(`[data-rows=${i}][data-columns=${x}]`).hasClass(findPlayer['name']);
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
             fight()
         }
-        highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
     }
-
 }
 
 $(document).ready(function () {
@@ -318,9 +287,6 @@ $(document).ready(function () {
 })
 
 // DISPLAY PLAYERS INFO ON THE GAME BOARD
-// PLAYER ONE COLOUR = BLACK
-// PLAYER TWO COLOR = PINK
-
 function playerInfo(type) {
 
     $('.player-one-name').text(type[0]['name']);
@@ -333,11 +299,10 @@ function playerInfo(type) {
     $('#player-two-attack-power').text(type[1]['weapon']['power']);
     $('#attack-power-player1').text(type[0]['weapon']['power']);
     $('#attack-power-player2').text(type[1]['weapon']['power']);
-
 }
 
 function fight() {
-
+    // console.log(playerIdentity)
     let playerName = currentPlayer['name']
     //Set Player's Lifepoints
     let playerOneLifepoint = 100;
@@ -347,25 +312,31 @@ function fight() {
     let playerTwoDefend = false;
 
     $('#player1-attack').click(function () {
-
+        let playerTurnToFight = player.find(play => {
+            return play['name'] === playerName
+        })
+        console.log(playerTurnToFight)
         //In case the player decides to defend
         if (playerTwoDefend === true) {
-
-            playerTwoLifepoint -= currentPlayer.weapon.power / 2;
+            console.log('Player 2 defend:', playerTurnToFight)
+            playerTwoLifepoint -= playerTurnToFight.weapon.power / 2;
             $('#player2-lifepoint').text(playerTwoLifepoint);
             playerTwoDefend = false;
         } else {
             //In case the player chooses not to defend
-            console.log(currentPlayer.weapon.power)
-            playerTwoLifepoint -= currentPlayer.weapon.power;
+            // console.log(playerTurnToFight.weapon.power)
+            console.log('Player 2 didn\'t defend:', playerTurnToFight)
+            playerTwoLifepoint -= playerTurnToFight.weapon.power;
             $('#player2-lifepoint').text(playerTwoLifepoint);
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
         if (playerTwoLifepoint <= 0) {
-            console.log("Player 1 wins");
+            $('#avatar').append('<img style="width:20%; margin:0 auto; display:block;" src="img/Sonya.jpg" alt="Player-1 Poster" />')
+            $('#winner').text(`${playerName} wins`);
+            window.location.href = '#game-over'
         }
-        playerName = 'lui-keng'
-        console.log('Next to play', playerName)
+        playerName = 'lui-keng';
+        buttonControl(playerName);
         playerOneDefend = false;
         $('#defence-player1').text(playerOneDefend);
     });
@@ -374,40 +345,72 @@ function fight() {
     $('#player1-defend').click(function () {
         playerOneDefend = true;
         $('#defence-player1').text(playerOneDefend);
-        playerName = 'lui-keng'
+        playerName = 'lui-keng';
+        buttonControl(playerName);
     });
 
     //Player 2 decides to Attack
     $('#player2-attack').click(function () {
-        console.log(playerName)
+        let playerTurnToFight = player.find(play => {
+
+            return play['name'] === playerName
+        })
         //In case the player decides to defend
         if (playerOneDefend === true) {
-            console.log(currentPlayer.weapon.power)
-            playerOneLifepoint -= currentPlayer.weapon.power / 2;
+
+            console.log('Player 1 defend:', playerTurnToFight)
+            playerOneLifepoint -= playerTurnToFight.weapon.power / 2;
             $('#player1-lifepoint').text(playerOneLifepoint);
             playerOneDefend = false;
         } else {
             //In case the player chooses not to defend
-            console.log(currentPlayer.weapon.power)
-            playerOneLifepoint -= currentPlayer.weapon.power;
+
+            console.log('Player 1 didn\'t defend:', playerTurnToFight)
+            playerOneLifepoint -= playerTurnToFight.weapon.power;
             $('#player1-lifepoint').text(playerOneLifepoint);
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
         if (playerOneLifepoint <= 0) {
             console.log("Player 2 wins");
-
+            $('#avatar').append('<img style="width:20%; margin:0 auto; display:block;" src="img/Liu_Kang_mk11.png" alt="Player-2 Poster" />');
+            $('#winner').text(`${playerName} wins`);
+            window.location.href = '#game-over';
         }
         playerName = 'sonya'
-        console.log(playerName)
-        playerOneDefend = false;
-        $('#defence-player2').text(playerOneDefend);
+        buttonControl(playerName)
+        playerTwoDefend = false;
+        $('#defence-player2').text(playerTwoDefend);
 
     });
     $('#player2-defend').click(function () {
         playerTwoDefend = true; //Player 2 decides to defend
         $('#defence-player2').text(playerTwoDefend);
         playerName = 'sonya'
-
+        buttonControl(playerName)
     });
 
+}
+// Set the Button properties duriing Fight
+function buttonControl(playerTitle) {
+    if (playerTitle === 'sonya') {
+        $('#player1-attack').css({ opacity: 1, cursor: "auto" });
+        $('#player1-defend').css({ opacity: 1, cursor: "auto" });
+        $('#player1-attack').prop('disabled', false)
+        $('#player1-defend').prop('disabled', false)
+
+        $('#player2-attack').css({ opacity: ".5", cursor: "not-allowed" });
+        $('#player2-defend').css({ opacity: ".5", cursor: "not-allowed" });
+        $('#player2-attack').prop('disabled', true)
+        $('#player2-defend').prop('disabled', true)
+    } else {
+        $('#player1-attack').css({ opacity: ".5", cursor: "not-allowed" });
+        $('#player1-defend').css({ opacity: ".5", cursor: "not-allowed" });
+        $('#player1-attack').prop('disabled', true)
+        $('#player1-defend').prop('disabled', true)
+
+        $('#player2-attack').css({ opacity: 1, cursor: "auto" });
+        $('#player2-defend').css({ opacity: 1, cursor: "auto" });
+        $('#player2-attack').prop('disabled', false)
+        $('#player2-defend').prop('disabled', false)
+    }
 }
