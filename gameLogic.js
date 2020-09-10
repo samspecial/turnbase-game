@@ -5,12 +5,17 @@ let weapon4 = new Weapon('sword', 40, 'img/sword.png');
 let weapon5 = new Weapon('bow', 30, 'img/bow.png');
 const weaponry = [weapon1, weapon2, weapon3, weapon4, weapon5];
 
-let position = { row: 0, column: 0 };
+let position = {
+    row: 0,
+    column: 0
+};
 // INSTANTIATING THE PLAYER CLASS
 let player1 = new Player('sonya', 100, 10, weapon1, position);
 let player2 = new Player('lui-keng', 100, 10, weapon1, position);
 const players = [player1, player2];
-const barrier = { name: 'figure' }
+const barrier = {
+    name: 'figure'
+}
 
 function createGameBoard() {
     for (let i = 1; i < 10; i++) {
@@ -36,7 +41,10 @@ function placeItem(item) {
     if (isOccupied) {
         return placeItem(item);
     } else {
-        item['position'] = { row: row, column: column }
+        item['position'] = {
+            row: row,
+            column: column
+        }
         selectedSquare.addClass(item['name']).addClass('occupied');
     }
 }
@@ -113,6 +121,7 @@ renderWeapons();
 
 //Switch player Function
 let currentPlayer = players[0]
+
 function switchPlayer() {
     if (currentPlayer === players[0]) {
         currentPlayer = players[1];
@@ -123,6 +132,7 @@ function switchPlayer() {
 
 let currentPlayerRow = currentPlayer['position']['row']
 let currentPlayerColumn = currentPlayer['position']['column']
+
 function movePlayer(newRow, newColumn) {
     let currentPlayerRow = currentPlayer['position']['row']
     let currentPlayerColumn = currentPlayer['position']['column']
@@ -212,7 +222,11 @@ const pickWeapon = (i, j, weaponry) => {
         let weaponPosition = selectWeaponSquare.hasClass(weaponry[x]['name']);
         if (weaponPosition) {
             let oldWeapon = currentPlayer['weapon'];
-            currentPlayer['weapon'] = { name: weaponry[x]['name'], power: weaponry[x]['power'], img: weaponry[x]['img'] };
+            currentPlayer['weapon'] = {
+                name: weaponry[x]['name'],
+                power: weaponry[x]['power'],
+                img: weaponry[x]['img']
+            };
             selectWeaponSquare.removeClass(weaponry[x]['name']);
             selectWeaponSquare.addClass(oldWeapon['name']);
             break;
@@ -257,7 +271,7 @@ function traverseDirections(i, j) {
 
         figure = $(`[data-rows=${x}][data-columns=${j}]`).hasClass('figure')
         if (figure) {
-            break;//Check what to do
+            break; //Check what to do
         }
         highlight = $(`[data-rows=${x}][data-columns=${j}]`).addClass('highlight-path')
         selectPlayer = $(`[data-rows=${x}][data-columns=${j}]`).hasClass(findPlayer['name']);
@@ -272,7 +286,7 @@ function traverseDirections(i, j) {
 
         figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
         if (figure) {
-            break;//Check what to do
+            break; //Check what to do
         }
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
         selectPlayer = $(`[data-rows=${i}][data-columns=${x}]`).hasClass(findPlayer['name']);
@@ -286,7 +300,7 @@ function traverseDirections(i, j) {
         // selectPlayer = checkPlayer(i, x)
         figure = $(`[data-rows=${i}][data-columns=${x}]`).hasClass('figure')
         if (figure) {
-            break;//Check what to do
+            break; //Check what to do
         }
         highlight = $(`[data-rows=${i}][data-columns=${x}]`).addClass('highlight-path')
         selectPlayer = $(`[data-rows=${i}][data-columns=${x}]`).hasClass(findPlayer['name']);
@@ -358,7 +372,7 @@ function fight(playerIdentity) {
             window.location.href = '#game-over'
         }
         playerIdentity['name'] = 'lui-keng';
-        // buttonControl(playerIdentity['name']);
+        buttonControl(playerIdentity['name']);
         playerOneDefend = false;
         $('#defence-player1').text(playerOneDefend);
         switchPlayer();
@@ -370,7 +384,7 @@ function fight(playerIdentity) {
         $('#defence-player1').text(playerOneDefend);
         console.log(playerIdentity['name'])
         playerIdentity['name'] = 'lui-keng'
-        // buttonControl(playerIdentity['name']);
+        buttonControl(playerIdentity['name']);
         switchPlayer();
     });
 
@@ -403,7 +417,7 @@ function fight(playerIdentity) {
         }
         playerIdentity['name'] = 'sonya'
         console.log(playerIdentity['name'])
-        // buttonControl(playerIdentity['name'])
+        buttonControl(playerIdentity['name'])
         playerTwoDefend = false;
         $('#defence-player2').text(playerTwoDefend);
         switchPlayer();
@@ -422,23 +436,47 @@ function fight(playerIdentity) {
 // Set the Button properties duriing Fight
 function buttonControl(playerTitle) {
     if (playerTitle === 'sonya') {
-        $('#player1-attack').css({ opacity: 1, cursor: "auto" });
-        $('#player1-defend').css({ opacity: 1, cursor: "auto" });
+        $('#player1-attack').css({
+            opacity: 1,
+            cursor: "auto"
+        });
+        $('#player1-defend').css({
+            opacity: 1,
+            cursor: "auto"
+        });
         $('#player1-attack').prop('disabled', false)
         $('#player1-defend').prop('disabled', false)
 
-        $('#player2-attack').css({ opacity: ".5", cursor: "not-allowed" });
-        $('#player2-defend').css({ opacity: ".5", cursor: "not-allowed" });
+        $('#player2-attack').css({
+            opacity: ".5",
+            cursor: "not-allowed"
+        });
+        $('#player2-defend').css({
+            opacity: ".5",
+            cursor: "not-allowed"
+        });
         $('#player2-attack').prop('disabled', true)
         $('#player2-defend').prop('disabled', true)
     } else {
-        $('#player1-attack').css({ opacity: ".5", cursor: "not-allowed" });
-        $('#player1-defend').css({ opacity: ".5", cursor: "not-allowed" });
+        $('#player1-attack').css({
+            opacity: ".5",
+            cursor: "not-allowed"
+        });
+        $('#player1-defend').css({
+            opacity: ".5",
+            cursor: "not-allowed"
+        });
         $('#player1-attack').prop('disabled', true)
         $('#player1-defend').prop('disabled', true)
 
-        $('#player2-attack').css({ opacity: 1, cursor: "auto" });
-        $('#player2-defend').css({ opacity: 1, cursor: "auto" });
+        $('#player2-attack').css({
+            opacity: 1,
+            cursor: "auto"
+        });
+        $('#player2-defend').css({
+            opacity: 1,
+            cursor: "auto"
+        });
         $('#player2-attack').prop('disabled', false)
         $('#player2-defend').prop('disabled', false)
     }
