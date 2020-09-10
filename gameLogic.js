@@ -1,4 +1,17 @@
-// Function to Generate Game Board of 9 by 9
+let weapon1 = new Weapon('Fist', 10, 'img/brick.png');
+let weapon2 = new Weapon('grenade', 60, 'img/grenade.png');
+let weapon3 = new Weapon('sniper', 50, 'img/sniper.png');
+let weapon4 = new Weapon('sword', 40, 'img/sword.png');
+let weapon5 = new Weapon('bow', 30, 'img/bow.png');
+const weaponry = [weapon1, weapon2, weapon3, weapon4, weapon5];
+
+let position = { row: 0, column: 0 };
+// INSTANTIATING THE PLAYER CLASS
+let player1 = new Player('sonya', 100, 10, weapon1, position);
+let player2 = new Player('lui-keng', 100, 10, weapon1, position);
+const players = [player1, player2];
+const barrier = { name: 'figure' }
+
 function createGameBoard() {
     for (let i = 1; i < 10; i++) {
         for (let j = 1; j < 10; j++) {
@@ -7,57 +20,13 @@ function createGameBoard() {
     }
 }
 createGameBoard();
+
+// Function to Generate Game Board of 9 by 9
 function randomNumber(min, max) {
     return Math.floor(Math.random() * max) + min;
 }
 
-const weapons = [{
-    name: 'grenade',
-    power: 60,
-    img: 'img/grenade.png'
-}, {
-    name: 'sniper',
-    power: 50,
-    img: 'img/sniper.png'
-}, {
-    name: 'sword',
-    power: 40,
-    img: 'img/sword.png'
-}, {
-    name: 'bow',
-    power: 30,
-    img: 'img/bow.png'
-}]
-const player = [{
-    name: 'sonya',
-    lifepoint: 100,
-    attack: 10,
-    weapon: {
-        name: 'Fist',
-        power: 10,
-        img: 'img/brick.png'
-    },
-    location: {
-        row: 0,
-        column: 0
-    }
-}, {
-    name: 'lui-keng',
-    lifepoint: 100,
-    attack: 10,
-    weapon: {
-        name: 'Fist',
-        power: 10,
-        img: 'img/brick.png'
-    },
-    location: {
-        row: 0,
-        column: 0
-    }
-}]
-const barrier = { name: "figure" }
-
-//Place items on the Board
+//  Place items on the Board
 function placeItem(item) {
     let isOccupied = ""
     let row = randomNumber(1, 9);
@@ -67,7 +36,7 @@ function placeItem(item) {
     if (isOccupied) {
         return placeItem(item);
     } else {
-        item['location'] = { row: row, column: column }
+        item['position'] = { row: row, column: column }
         selectedSquare.addClass(item['name']).addClass('occupied');
     }
 }
@@ -80,14 +49,14 @@ function renderBarriers() {
 
 //Function to loop through the player array
 function renderPlayers() {
-    for (var i = 0; i < player.length; i++) {
-        placeItem(player[i]);
+    for (var i = 0; i < players.length; i++) {
+        placeItem(players[i]);
     }
 }
 //Function to loop through the Weapon array
 function renderWeapons() {
-    for (var i = 0; i < weapons.length; i++) {
-        placeItem(weapons[i]);
+    for (var i = 0; i < weaponry.length; i++) {
+        placeItem(weaponry[i]);
     }
 }
 
@@ -95,37 +64,84 @@ renderBarriers();
 renderPlayers();
 renderWeapons();
 
+
+
+// const weapons = [{
+//     name: 'grenade',
+//     power: 60,
+//     img: 'img/grenade.png'
+// }, {
+//     name: 'sniper',
+//     power: 50,
+//     img: 'img/sniper.png'
+// }, {
+//     name: 'sword',
+//     power: 40,
+//     img: 'img/sword.png'
+// }, {
+//     name: 'bow',
+//     power: 30,
+//     img: 'img/bow.png'
+// }]
+// const player = [{
+//     name: 'sonya',
+//     lifepoint: 100,
+//     attack: 10,
+//     weapon: {
+//         name: 'Fist',
+//         power: 10,
+//         img: 'img/brick.png'
+//     },
+//     location: {
+//         row: 0,
+//         column: 0
+//     }
+// }, {
+//     name: 'lui-keng',
+//     lifepoint: 100,
+//     attack: 10,
+//     weapon: {
+//         name: 'Fist',
+//         power: 10,
+//         img: 'img/brick.png'
+//     },
+//     location: {
+//         row: 0,
+//         column: 0
+//     }
+// }]
+
 //Switch player Function
-let currentPlayer = player[0]
+let currentPlayer = players[0]
 function switchPlayer() {
-    if (currentPlayer === player[0]) {
-        currentPlayer = player[1];
+    if (currentPlayer === players[0]) {
+        currentPlayer = players[1];
     } else {
-        currentPlayer = player[0];
+        currentPlayer = players[0];
     }
 }
 
-let currentPlayerRow = currentPlayer['location']['row']
-let currentPlayerColumn = currentPlayer['location']['column']
+let currentPlayerRow = currentPlayer['position']['row']
+let currentPlayerColumn = currentPlayer['position']['column']
 function movePlayer(newRow, newColumn) {
-    let currentPlayerRow = currentPlayer['location']['row']
-    let currentPlayerColumn = currentPlayer['location']['column']
+    let currentPlayerRow = currentPlayer['position']['row']
+    let currentPlayerColumn = currentPlayer['position']['column']
     let playerRow = parseInt(newRow, 10);
     let playerColumn = parseInt(newColumn, 10);
 
     let barrierCheck = checkBarriers(parseInt(newRow, 10), parseInt(newColumn, 10))
     let moveNow = validMove(playerRow, playerColumn)
     if (!barrierCheck && moveNow) {
-        pickWeapon(newRow, newColumn, weapons)
+        pickWeapon(newRow, newColumn, weaponry)
         $(`[data-rows=${currentPlayerRow}][data-columns=${currentPlayerColumn}]`).removeClass(currentPlayer['name']);
 
         $(`[data-rows=${newRow}][data-columns=${newColumn}]`).addClass(currentPlayer['name']);
-        currentPlayer['location']['row'] = playerRow;
-        currentPlayer['location']['column'] = playerColumn;
+        currentPlayer['position']['row'] = playerRow;
+        currentPlayer['position']['column'] = playerColumn;
         clearHighlighedSquare();
 
         switchPlayer();
-        traverseDirections(parseInt(currentPlayer['location']['row'], 10), parseInt(currentPlayer['location']['column'], 10));
+        traverseDirections(parseInt(currentPlayer['position']['row'], 10), parseInt(currentPlayer['position']['column'], 10));
     } else {
         alert("Wrong Move")
     }
@@ -133,8 +149,8 @@ function movePlayer(newRow, newColumn) {
 }
 //Check player move if Valid
 function validMove(squareRow, squareCol) {
-    const playerCol = currentPlayer['location']['column']
-    const playerRow = currentPlayer['location']['row']
+    const playerCol = currentPlayer['position']['column']
+    const playerRow = currentPlayer['position']['row']
     const direction = (squareRow === playerRow) ? 'column' : 'row';
     const columnChange = Math.abs(playerCol - squareCol);
     const rowChange = Math.abs(playerRow - squareRow);
@@ -146,8 +162,8 @@ function validMove(squareRow, squareCol) {
 
 // Barrier Check for Player Movement
 function checkBarriers(squareRow, squareCol) {
-    const playerCol = currentPlayer['location']['column'];
-    const playerRow = currentPlayer['location']['row'];
+    const playerCol = currentPlayer['position']['column'];
+    const playerRow = currentPlayer['position']['row'];
     const direction = (squareRow === playerRow) ? 'column' : 'row';
     const columnChange = playerCol - squareCol;
     const rowChange = playerRow - squareRow;
@@ -189,15 +205,15 @@ function checkBarriers(squareRow, squareCol) {
     }
 }
 // Pick New Weapon
-const pickWeapon = (i, j, weapons) => {
+const pickWeapon = (i, j, weaponry) => {
 
-    for (let x = 0; x < weapons.length; x++) {
+    for (let x = 0; x < weaponry.length; x++) {
         let selectWeaponSquare = $(`[data-rows=${i}][data-columns=${j}]`)
-        let weaponPosition = selectWeaponSquare.hasClass(weapons[x]['name']);
+        let weaponPosition = selectWeaponSquare.hasClass(weaponry[x]['name']);
         if (weaponPosition) {
             let oldWeapon = currentPlayer['weapon'];
-            currentPlayer['weapon'] = { name: weapons[x]['name'], power: weapons[x]['power'], img: weapons[x]['img'] };
-            selectWeaponSquare.removeClass(weapons[x]['name']);
+            currentPlayer['weapon'] = { name: weaponry[x]['name'], power: weaponry[x]['power'], img: weaponry[x]['img'] };
+            selectWeaponSquare.removeClass(weaponry[x]['name']);
             selectWeaponSquare.addClass(oldWeapon['name']);
             break;
         }
@@ -214,13 +230,13 @@ function clearHighlighedSquare() {
 
 // Function traverseSquare
 function traverseDirections(i, j) {
-    playerInfo(player)
+    playerInfo(players)
     let highlight = ''
     let figure;
     let selectPlayer;
-
+    console.log(currentPlayer)
     //Check if the another player lies on the path of the current player
-    let findPlayer = player.find(play => {
+    let findPlayer = players.find(play => {
         return play['name'] !== currentPlayer['name']
     })
     console.log(findPlayer['name']);
@@ -234,7 +250,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight()
+            fight(currentPlayer)
         }
     }
     for (let x = i - 1; x >= i - 3; x--) {
@@ -248,7 +264,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight()
+            fight(currentPlayer)
         }
     }
 
@@ -263,7 +279,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight()
+            fight(currentPlayer)
         }
     }
     for (let x = j - 1; x >= j - 3; x--) {
@@ -277,7 +293,7 @@ function traverseDirections(i, j) {
         if (selectPlayer) {
             console.log('I am Ready to Battle', selectPlayer)
             window.location.href = "#fight-modal"
-            fight()
+            fight(currentPlayer)
         }
     }
 }
@@ -301,8 +317,8 @@ function playerInfo(type) {
     $('#attack-power-player2').text(type[1]['weapon']['power']);
 }
 
-function fight() {
-    // console.log(playerIdentity)
+function fight(playerIdentity) {
+    console.log(playerIdentity)
     let playerName = currentPlayer['name']
     //Set Player's Lifepoints
     let playerOneLifepoint = 100;
@@ -310,23 +326,29 @@ function fight() {
     //Set Player Action for either defend or attack
     let playerOneDefend = false;
     let playerTwoDefend = false;
+    // If player name is currentPlayer
+    // If currentPlayer is equal to player Sonya
+    // Check if player want to attack, end the action with a Switch player command
+    // Check if player want to defend, end the action with a switch player command
+
 
     $('#player1-attack').click(function () {
-        let playerTurnToFight = player.find(play => {
-            return play['name'] === playerName
-        })
-        console.log(playerTurnToFight)
+        // let playerIdentity = players.find(play => {
+        //     return play['name'] === playerName
+        // })
+        console.log(playerIdentity)
         //In case the player decides to defend
         if (playerTwoDefend === true) {
-            console.log('Player 2 defend:', playerTurnToFight)
-            playerTwoLifepoint -= playerTurnToFight.weapon.power / 2;
+            console.log('Player 2 defend:', playerIdentity)
+            playerTwoLifepoint -= playerIdentity.weapon.power / 2;
             $('#player2-lifepoint').text(playerTwoLifepoint);
             playerTwoDefend = false;
+            switchPlayer();
         } else {
             //In case the player chooses not to defend
-            // console.log(playerTurnToFight.weapon.power)
-            console.log('Player 2 didn\'t defend:', playerTurnToFight)
-            playerTwoLifepoint -= playerTurnToFight.weapon.power;
+            // console.log(playerIdentity.weapon.power)
+            console.log('Player 2 didn\'t defend:', playerIdentity)
+            playerTwoLifepoint -= playerIdentity.weapon.power;
             $('#player2-lifepoint').text(playerTwoLifepoint);
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
@@ -335,38 +357,41 @@ function fight() {
             $('#winner').text(`${playerName} wins`);
             window.location.href = '#game-over'
         }
-        playerName = 'lui-keng';
-        buttonControl(playerName);
+        playerIdentity['name'] = 'lui-keng';
+        // buttonControl(playerIdentity['name']);
         playerOneDefend = false;
         $('#defence-player1').text(playerOneDefend);
+        switchPlayer();
     });
 
     //Player 1 decides to defend
     $('#player1-defend').click(function () {
         playerOneDefend = true;
         $('#defence-player1').text(playerOneDefend);
-        playerName = 'lui-keng';
-        buttonControl(playerName);
+        console.log(playerIdentity['name'])
+        playerIdentity['name'] = 'lui-keng'
+        // buttonControl(playerIdentity['name']);
+        switchPlayer();
     });
 
     //Player 2 decides to Attack
     $('#player2-attack').click(function () {
-        let playerTurnToFight = player.find(play => {
+        // let playerIdentity = players.find(play => {
 
-            return play['name'] === playerName
-        })
+        //     return play['name'] === playerName
+        // })
         //In case the player decides to defend
         if (playerOneDefend === true) {
 
-            console.log('Player 1 defend:', playerTurnToFight)
-            playerOneLifepoint -= playerTurnToFight.weapon.power / 2;
+            console.log('Player 1 defend:', playerIdentity)
+            playerOneLifepoint -= playerIdentity.weapon.power / 2;
             $('#player1-lifepoint').text(playerOneLifepoint);
             playerOneDefend = false;
         } else {
             //In case the player chooses not to defend
 
-            console.log('Player 1 didn\'t defend:', playerTurnToFight)
-            playerOneLifepoint -= playerTurnToFight.weapon.power;
+            console.log('Player 1 didn\'t defend:', playerIdentity)
+            playerOneLifepoint -= playerIdentity.weapon.power;
             $('#player1-lifepoint').text(playerOneLifepoint);
         }
         //When the opponent's player's life is less than or equal to 0 declare winner
@@ -376,20 +401,24 @@ function fight() {
             $('#winner').text(`${playerName} wins`);
             window.location.href = '#game-over';
         }
-        playerName = 'sonya'
-        buttonControl(playerName)
+        playerIdentity['name'] = 'sonya'
+        console.log(playerIdentity['name'])
+        // buttonControl(playerIdentity['name'])
         playerTwoDefend = false;
         $('#defence-player2').text(playerTwoDefend);
+        switchPlayer();
 
     });
     $('#player2-defend').click(function () {
         playerTwoDefend = true; //Player 2 decides to defend
         $('#defence-player2').text(playerTwoDefend);
-        playerName = 'sonya'
-        buttonControl(playerName)
+        playerIdentity['name'] = 'sonya';
+        buttonControl(playerIdentity['name'])
+        switchPlayer();
     });
-
 }
+
+
 // Set the Button properties duriing Fight
 function buttonControl(playerTitle) {
     if (playerTitle === 'sonya') {
