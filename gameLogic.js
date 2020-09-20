@@ -72,53 +72,6 @@ renderBarriers();
 renderPlayers();
 renderWeapons();
 
-
-
-// const weapons = [{
-//     name: 'grenade',
-//     power: 60,
-//     img: 'img/grenade.png'
-// }, {
-//     name: 'sniper',
-//     power: 50,
-//     img: 'img/sniper.png'
-// }, {
-//     name: 'sword',
-//     power: 40,
-//     img: 'img/sword.png'
-// }, {
-//     name: 'bow',
-//     power: 30,
-//     img: 'img/bow.png'
-// }]
-// const player = [{
-//     name: 'sonya',
-//     lifepoint: 100,
-//     attack: 10,
-//     weapon: {
-//         name: 'Fist',
-//         power: 10,
-//         img: 'img/brick.png'
-//     },
-//     location: {
-//         row: 0,
-//         column: 0
-//     }
-// }, {
-//     name: 'lui-keng',
-//     lifepoint: 100,
-//     attack: 10,
-//     weapon: {
-//         name: 'Fist',
-//         power: 10,
-//         img: 'img/brick.png'
-//     },
-//     location: {
-//         row: 0,
-//         column: 0
-//     }
-// }]
-
 //Switch player Function
 let currentPlayer = players[0]
 
@@ -332,8 +285,9 @@ function playerInfo(type) {
 }
 
 function fight(playerIdentity) {
-    console.log(playerIdentity)
-    let playerName = currentPlayer['name']
+
+    let playerName = currentPlayer['name'];
+    $('#nowPlaying').text(playerName.toUpperCase());
     //Set Player's Lifepoints
     let playerOneLifepoint = 100;
     let playerTwoLifepoint = 100;
@@ -347,9 +301,7 @@ function fight(playerIdentity) {
 
 
     $('#player1-attack').click(function () {
-        // let playerIdentity = players.find(play => {
-        //     return play['name'] === playerName
-        // })
+
         console.log(playerIdentity)
         //In case the player decides to defend
         if (playerTwoDefend === true) {
@@ -371,11 +323,12 @@ function fight(playerIdentity) {
             $('#winner').text(`${playerName} wins`);
             window.location.href = '#game-over'
         }
-        playerIdentity['name'] = 'lui-keng';
-        buttonControl(playerIdentity['name']);
+        buttonControl('lui-keng');
         playerOneDefend = false;
         $('#defence-player1').text(playerOneDefend);
         switchPlayer();
+        playerIdentity = currentPlayer;
+        $('#nowPlaying').text(playerIdentity['name'].toUpperCase());
     });
 
     //Player 1 decides to defend
@@ -383,17 +336,15 @@ function fight(playerIdentity) {
         playerOneDefend = true;
         $('#defence-player1').text(playerOneDefend);
         console.log(playerIdentity['name'])
-        playerIdentity['name'] = 'lui-keng'
-        buttonControl(playerIdentity['name']);
+        buttonControl('lui-keng');
         switchPlayer();
+        playerIdentity = currentPlayer;
+        $('#nowPlaying').text(playerIdentity['name'].toUpperCase());
     });
 
     //Player 2 decides to Attack
     $('#player2-attack').click(function () {
-        // let playerIdentity = players.find(play => {
 
-        //     return play['name'] === playerName
-        // })
         //In case the player decides to defend
         if (playerOneDefend === true) {
 
@@ -415,20 +366,22 @@ function fight(playerIdentity) {
             $('#winner').text(`${playerName} wins`);
             window.location.href = '#game-over';
         }
-        playerIdentity['name'] = 'sonya'
         console.log(playerIdentity['name'])
-        buttonControl(playerIdentity['name'])
+        buttonControl('sonya')
         playerTwoDefend = false;
         $('#defence-player2').text(playerTwoDefend);
         switchPlayer();
+        playerIdentity = currentPlayer;
+        $('#nowPlaying').text(playerIdentity['name'].toUpperCase());
 
     });
     $('#player2-defend').click(function () {
         playerTwoDefend = true; //Player 2 decides to defend
         $('#defence-player2').text(playerTwoDefend);
-        playerIdentity['name'] = 'sonya';
-        buttonControl(playerIdentity['name'])
+        buttonControl('sonya');
         switchPlayer();
+        playerIdentity = currentPlayer;
+        $('#nowPlaying').text(playerIdentity['name'].toUpperCase());
     });
 }
 
